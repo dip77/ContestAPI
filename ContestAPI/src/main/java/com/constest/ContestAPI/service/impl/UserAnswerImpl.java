@@ -106,6 +106,14 @@ public class UserAnswerImpl implements UserAnswerService {
         return userId;
     }
 
+    @Override
+    public List<UserAnswerEntity> getUserEntity(String userId, String contestQuestionId) {
+        ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
+        contestQuestionEntity.setContestQuestionId(contestQuestionId);
+        List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.getByUserIdAndContestQuestionEntity(userId,contestQuestionEntity);
+        return userAnswerEntities;
+    }
+
 
 //    @Override
 //    public int getUserContestPoints(String contestId, String userId) {

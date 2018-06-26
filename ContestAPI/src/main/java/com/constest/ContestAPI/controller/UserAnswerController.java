@@ -42,4 +42,19 @@ public class UserAnswerController {
     public String getFastestUser(@PathVariable String contestQuestionId) {
         return userAnswerService.getFastestAnswer(contestQuestionId);
     }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "getUserEntity/{userId}/{contestQuestionId}")
+    public List<UserAnswerEntity> getUserEntity(@PathVariable String userId,@PathVariable String contestQuestionId) {
+        return userAnswerService.getUserEntity(userId,contestQuestionId);
+    }
+
+    // @RequestMapping(method = RequestMethod.GET, value = "getUserContestPoints/{contestId}/{userId}")
+    // public Integer getUserContestPoints(@PathVariable String contestId, @PathVariable String userId) {
+    //     return userAnswerService.getUserContestPoints(contestId, userId);
+    // }
+
+
+
+
 }
