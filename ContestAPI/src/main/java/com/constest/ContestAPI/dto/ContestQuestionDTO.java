@@ -1,6 +1,9 @@
 package com.constest.ContestAPI.dto;
 
 import com.constest.ContestAPI.entity.ContestEntity;
+
+import java.util.List;
+
 public class  ContestQuestionDTO {
     private ContestDTO contestDTO;
     private String questionId;
@@ -11,7 +14,16 @@ public class  ContestQuestionDTO {
     private String contestQuestionId;
     private QuestionDTO questionDTO;
     private UserAnswerDTO userAnswerDTO;
+    private List<UserAnswerDTO> allUserAnswerEntityList;
 
+
+    public List<UserAnswerDTO> getAllUserAnswerEntityList() {
+        return allUserAnswerEntityList;
+    }
+
+    public void setAllUserAnswerEntityList(List<UserAnswerDTO> allUserAnswerEntityList) {
+        this.allUserAnswerEntityList = allUserAnswerEntityList;
+    }
 
     public UserAnswerDTO getUserAnswerDTO() {
         return userAnswerDTO;

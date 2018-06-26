@@ -24,6 +24,7 @@ public class ContestEntity {
     @JoinColumn(name = "contest_id")
     private List<ContestQuestionEntity> contestQuestionEntityList;
 
+
     private String contestName;
     private String contestType;
     private String startDate;
