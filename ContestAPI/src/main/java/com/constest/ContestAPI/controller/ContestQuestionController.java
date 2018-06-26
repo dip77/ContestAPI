@@ -2,6 +2,7 @@ package com.constest.ContestAPI.controller;
 
 import com.constest.ContestAPI.dto.ContestDTO;
 import com.constest.ContestAPI.dto.ContestQuestionDTO;
+import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import com.constest.ContestAPI.service.ContestQuestionService;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +25,9 @@ public class ContestQuestionController {
         System.out.println(contestQuestionDTO);
         ContestQuestionEntity contestQuestionEntity=new ContestQuestionEntity();
         BeanUtils.copyProperties(contestQuestionDTO,contestQuestionEntity);
+        ContestEntity contestEntity=new ContestEntity();
+        contestEntity.setContestId(contestQuestionDTO.getContestDTO().getContestId());
+        contestQuestionEntity.setContestEntity(contestEntity);
         return contestQuestionService.saveQuestion(contestQuestionEntity);
 
 

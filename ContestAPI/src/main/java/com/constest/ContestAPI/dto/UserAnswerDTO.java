@@ -9,7 +9,7 @@ public class UserAnswerDTO {
     private ContestQuestionDTO contestQuestionDTO;
     private String userId;
     private String answer;
-    private int points;
+    private Integer points;
     private Boolean skipped;
     private Timestamp timeOfAnswer;
 

@@ -19,7 +19,7 @@ public class UserAnswerEntity {
     private String userAnswerId;
     private String userId;
     private String answer;
-    private int points;
+    private Integer points;
     private Boolean skipped;
     private Timestamp timeOfAnswer;
 
@@ -39,6 +39,10 @@ public class UserAnswerEntity {
     //  @JoinColumn(name="userContestId",nullable = false)
     //  UserPointsEntity userPointsEntity;
 
+
+    public Boolean getSkipped() {
+        return skipped;
+    }
 
     public ContestQuestionEntity getContestQuestionEntity() {
         return contestQuestionEntity;
@@ -60,14 +64,6 @@ public class UserAnswerEntity {
 
     public Integer getPoints() {
         return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
-    }
-
-    public Boolean getSkipped() {
-        return skipped;
     }
 
     public void setSkipped(Boolean skipped) {

@@ -10,10 +10,11 @@ import java.util.List;
 public interface UserPointsService {
 
     boolean save(UserPointsDTO userPointsDTO);
-    int getByUserIdAndFinalPoints(String userId,int finalPoints);
+    //int getByUserId(String userId);
     boolean saveToHistory(OverAllLeaderBoardEntity overAllLeaderBoardEntity);
     List<OverAllLeaderBoardDTO> getAll();
     List<UserPointsDTO> getByContestId(String contestId);
     List<UserPointsDTO> getAllContests();
-
+    boolean updatePoints(UserPointsDTO userPointsDTO);
+    //OverAllLeaderBoardDTO getByUserId(String userId);
 }
