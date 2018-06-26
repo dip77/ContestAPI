@@ -1,5 +1,6 @@
 package com.constest.ContestAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class ContestQuestionEntity {
     @Column(name =  ContestQuestionEntity.ID_COLUMN)
     private String contestQuestionId;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "contest_id",nullable = false)
     private ContestEntity contestEntity;
@@ -24,7 +26,7 @@ public class ContestQuestionEntity {
     private Integer points;
     private Integer visibleTime;
     private Integer sequence;
-    private Boolean isVisible;
+    private Boolean visible;
 
     @Override
     public String toString() {
@@ -35,7 +37,7 @@ public class ContestQuestionEntity {
                 ", points=" + points +
                 ", visibleTime=" + visibleTime +
                 ", sequence=" + sequence +
-                ", isVisible=" + isVisible +
+                ", isVisible=" + visible +
                 '}';
     }
 
@@ -88,10 +90,10 @@ public class ContestQuestionEntity {
     }
 
     public Boolean getVisible() {
-        return isVisible;
+        return visible;
     }
 
     public void setVisible(Boolean visible) {
-        isVisible = visible;
+        this.visible = visible;
     }
 }

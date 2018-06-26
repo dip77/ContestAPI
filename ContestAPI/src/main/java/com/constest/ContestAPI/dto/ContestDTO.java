@@ -1,23 +1,43 @@
 package com.constest.ContestAPI.dto;
 
+import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.List;
 
 public class ContestDTO {
 
     private String contestId;
     private String contestName;
     private String contestType;
-    private Timestamp startDate;
-    private Timestamp endDate;
+    private String startDate;
+    private String endDate;
     private String categoryId;
     private String adminId;
     private Integer questionVisibilityDuration;
     private Integer bonus;
     private String categoryName;
     private String email;
+    private Integer numberOfQuestions;
+    private List<ContestQuestionDTO> contestQuestionDTOList;
+
+
+    public List<ContestQuestionDTO> getContestQuestionDTOList() {
+        return contestQuestionDTOList;
+    }
+
+    public void setContestQuestionDTOList(List<ContestQuestionDTO> contestQuestionDTOList) {
+        this.contestQuestionDTOList = contestQuestionDTOList;
+    }
+
+    public Integer getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
+    public void setNumberOfQuestions(Integer numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
+    }
 
     @Override
     public String toString() {
@@ -76,19 +96,19 @@ public class ContestDTO {
         this.contestType = contestType;
     }
 
-    public Timestamp getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Timestamp getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

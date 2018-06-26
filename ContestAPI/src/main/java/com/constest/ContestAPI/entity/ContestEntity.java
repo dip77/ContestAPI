@@ -1,11 +1,10 @@
 package com.constest.ContestAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = ContestEntity.TABLE_NAME)
@@ -20,17 +19,19 @@ public class ContestEntity {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = ContestEntity.ID_COLUMN)
     private String contestId;
+    @JsonManagedReference
     @OneToMany
     @JoinColumn(name = "contest_id")
     private List<ContestQuestionEntity> contestQuestionEntityList;
 
     private String contestName;
     private String contestType;
-    private Timestamp startDate;
-    private Timestamp endDate;
+    private String startDate;
+    private String endDate;
     private String categoryId;
     private String adminId;
     private Integer questionVisibilityDuration;
+    private Integer numberOfQuestions;
     private Integer bonus;
 
     @Override
@@ -46,6 +47,22 @@ public class ContestEntity {
                 ", questionVisibilityDuration=" + questionVisibilityDuration +
                 ", bonus=" + bonus +
                 '}';
+    }
+
+    public List<ContestQuestionEntity> getContestQuestionEntityList() {
+        return contestQuestionEntityList;
+    }
+
+    public void setContestQuestionEntityList(List<ContestQuestionEntity> contestQuestionEntityList) {
+        this.contestQuestionEntityList = contestQuestionEntityList;
+    }
+
+    public Integer getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
+    public void setNumberOfQuestions(Integer numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
     }
 
     public static String getIdColumn() {
@@ -76,19 +93,19 @@ public class ContestEntity {
         this.contestType = contestType;
     }
 
-    public Timestamp getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Timestamp getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
