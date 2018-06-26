@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+//todo : phani .. change the path from contest to contestQuestion etc...
 @RequestMapping(value = "/contest")
 public class ContestQuestionController {
 
@@ -29,9 +30,8 @@ public class ContestQuestionController {
         contestEntity.setContestId(contestQuestionDTO.getContestDTO().getContestId());
         contestQuestionEntity.setContestEntity(contestEntity);
         return contestQuestionService.saveQuestion(contestQuestionEntity);
-
-
     }
+
     @RequestMapping(method=RequestMethod.POST,value = "/addQuestions")
     public Boolean saveQuestion(@RequestBody List<ContestQuestionDTO> contestQuestionDTOList){
         List<ContestQuestionEntity> contestQuestionEntityList=new ArrayList<ContestQuestionEntity>();
@@ -42,6 +42,7 @@ public class ContestQuestionController {
         }
         return contestQuestionService.saveQuestions(contestQuestionEntityList);
     }
+
     @RequestMapping(method=RequestMethod.GET,value = "/getContestQuestion/{contestQuestionId}")
     public ContestQuestionDTO getContestQuestion(@PathVariable("contestQuestionId") String contestQuestionId)
     {

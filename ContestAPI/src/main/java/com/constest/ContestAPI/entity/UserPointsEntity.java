@@ -28,6 +28,7 @@ public class UserPointsEntity {
     private int easyCorrectlyAnswered ;
     private int mediumCorrectlyAnswered ;
     private int hardCorrectlyAnswered ;
+    //todo : phani : field has to be camel case, should not start with capital
     private int Bonus ;
     private int rank;
 
