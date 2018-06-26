@@ -78,8 +78,8 @@ public class ContestController {
         return contestDTOList;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getContestQuestions/{contestId}")
-    public ContestDTO getContestQuestions(@PathVariable("contestId") String contestId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/getContestQuestions/{contestId}/{userId}")
+    public ContestDTO getContestQuestions(@PathVariable("contestId") String contestId,@PathVariable("userId") String  userId) {
         ContestEntity contestEntity = contestService.getAllContestQuestions(contestId);
         ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
