@@ -1,8 +1,7 @@
 package com.constest.ContestAPI.dto;
 
 import com.constest.ContestAPI.entity.ContestEntity;
-
-public class    ContestQuestionDTO {
+public class  ContestQuestionDTO {
     private ContestDTO contestDTO;
     private String questionId;
     private Integer points;
@@ -11,6 +10,16 @@ public class    ContestQuestionDTO {
     private Boolean visible;
     private String contestQuestionId;
     private QuestionDTO questionDTO;
+    private UserAnswerDTO userAnswerDTO;
+
+
+    public UserAnswerDTO getUserAnswerDTO() {
+        return userAnswerDTO;
+    }
+
+    public void setUserAnswerDTO(UserAnswerDTO userAnswerDTO) {
+        this.userAnswerDTO = userAnswerDTO;
+    }
 
     public QuestionDTO getQuestionDTO() {
         return questionDTO;

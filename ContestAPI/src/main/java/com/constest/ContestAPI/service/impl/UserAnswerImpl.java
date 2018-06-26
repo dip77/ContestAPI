@@ -24,6 +24,10 @@ public class UserAnswerImpl implements UserAnswerService {
     public Boolean save(UserAnswerDTO userAnswerDTO) {
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
+        ContestQuestionEntity contestQuestionEntity=new ContestQuestionEntity();
+        contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
+        userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
+        System.out.println(userAnswerEntity);
         try {
             userAnswerRepository.save(userAnswerEntity);
             return true;
@@ -132,6 +136,5 @@ public class UserAnswerImpl implements UserAnswerService {
     }
 
 
-    //easy medium hard score
-
+//easy medium hard score
 }
