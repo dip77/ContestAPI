@@ -33,7 +33,7 @@ public class UserAnswerEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "contestQuestionId", nullable = false)
+    @JoinColumn(name = "contest_question_id")
     ContestQuestionEntity contestQuestionEntity;
 
     //  @ManyToOne
@@ -76,7 +76,7 @@ public class UserAnswerEntity {
     }
 
     public void setSkipped(Boolean skipped) {
-        skipped = skipped;
+        this.skipped = skipped;
     }
 
     public String getUserId() {

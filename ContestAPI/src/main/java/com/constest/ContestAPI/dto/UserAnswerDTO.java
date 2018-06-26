@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 
 public class UserAnswerDTO {
     private String userAnswerId;
-    private String contestQuestionId;
     private ContestQuestionDTO contestQuestionDTO;
     private String userContestId;
     private String userId;
@@ -20,7 +19,7 @@ public class UserAnswerDTO {
     public String toString() {
         return "UserAnswerDTO{" +
                 "userAnswerId='" + userAnswerId + '\'' +
-                ", contestQuestionId='" + contestQuestionId + '\'' +
+
                 ", contestQuestionDTO=" + contestQuestionDTO +
                 ", userContestId='" + userContestId + '\'' +
                 ", userId='" + userId + '\'' +
@@ -62,15 +61,7 @@ public class UserAnswerDTO {
         this.userId = userId;
     }
 
-    public String getContestQuestionId() {
-        return contestQuestionId;
-    }
-
-    public void setContestQuestionId(String contestQuestionId) {
-        this.contestQuestionId = contestQuestionId;
-    }
-
-    public String getUserContestId() {
+   public String getUserContestId() {
         return userContestId;
     }
 
@@ -92,6 +83,14 @@ public class UserAnswerDTO {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public Boolean getSkipped() {
+        return skipped;
+    }
+
+    public void setSkipped(Boolean skipped) {
+        this.skipped = skipped;
     }
 
     public Timestamp getTimeOfAnswer() {
