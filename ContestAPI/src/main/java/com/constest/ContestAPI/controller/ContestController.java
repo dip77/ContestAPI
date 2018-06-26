@@ -23,6 +23,7 @@ public class ContestController {
     @RequestMapping(method = RequestMethod.POST, value = "/createContest")
     public Boolean saveContest(@RequestBody ContestDTO contestDTO) {
         ContestEntity contestEntity = new ContestEntity();
+        contestEntity.setContestType(contestEntity.getContestType().toLowerCase());
         BeanUtils.copyProperties(contestDTO, contestEntity);
         return contestService.saveContest(contestEntity);
     }
@@ -85,7 +86,6 @@ public class ContestController {
             BeanUtils.copyProperties(contestQuestionEntity,contestQuestionDTO);
             QuestionDTO questionDTO=new QuestionDTO();
             contestQuestionDTO.setQuestionDTO(questionDTO);
-            questionDTO.setAnswer("A");
             questionDTO.setAnswerType("single");
             questionDTO.setDifficulty("easy");
             questionDTO.setOptionOne("option one");
