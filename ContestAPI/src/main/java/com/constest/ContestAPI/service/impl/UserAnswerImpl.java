@@ -107,10 +107,10 @@ public class UserAnswerImpl implements UserAnswerService {
     }
 
     @Override
-    public List<UserAnswerEntity> getUserEntity(String userId, String contestQuestionId) {
+    public UserAnswerEntity getUserEntity(String userId, String contestQuestionId) {
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(contestQuestionId);
-        List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.getByUserIdAndContestQuestionEntity(userId,contestQuestionEntity);
+        UserAnswerEntity userAnswerEntities = userAnswerRepository.getOneByUserIdAndContestQuestionEntity(userId,contestQuestionEntity);
         return userAnswerEntities;
     }
 

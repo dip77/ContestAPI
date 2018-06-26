@@ -45,7 +45,7 @@ public class UserAnswerController {
 
 
     @RequestMapping(method = RequestMethod.GET, value = "getUserEntity/{userId}/{contestQuestionId}")
-    public List<UserAnswerEntity> getUserEntity(@PathVariable String userId,@PathVariable String contestQuestionId) {
+    public UserAnswerEntity getUserEntity(@PathVariable String userId,@PathVariable String contestQuestionId) {
         return userAnswerService.getUserEntity(userId,contestQuestionId);
     }
 
