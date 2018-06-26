@@ -22,5 +22,7 @@ public interface UserAnswerRepository extends CrudRepository<UserAnswerEntity, S
     //  public List<UserAnswerEntity> findAllByContestQuestionEntityAndUserId(ContestQuestionEntity contestQuestionEntity,String userId);
 
    // public List<UserAnswerEntity> findAllByUserPointsEntityAndUserId(UserPointsEntity userPointsEntity,String userId);
+
+    public List<UserAnswerEntity> getByUserIdAndContestQuestionEntity(String userId,ContestQuestionEntity contestQuestionEntity);
 }
 

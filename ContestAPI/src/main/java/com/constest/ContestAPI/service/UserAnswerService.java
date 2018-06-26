@@ -28,6 +28,8 @@ public interface UserAnswerService {
 
     // public int getUserContestPoints(String contestId, String userId);
 
+    public List<UserAnswerEntity> getUserEntity(String userId,String contestQuestionId);
+
     public int getUserScore(String userId);
 
 

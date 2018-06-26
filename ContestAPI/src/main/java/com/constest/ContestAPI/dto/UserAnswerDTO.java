@@ -7,10 +7,9 @@ import java.sql.Timestamp;
 public class UserAnswerDTO {
     private String userAnswerId;
     private ContestQuestionDTO contestQuestionDTO;
-    private String userContestId;
     private String userId;
     private String answer;
-    private int points;
+    private Integer points;
     private Boolean skipped;
     private Timestamp timeOfAnswer;
 
@@ -21,7 +20,7 @@ public class UserAnswerDTO {
                 "userAnswerId='" + userAnswerId + '\'' +
 
                 ", contestQuestionDTO=" + contestQuestionDTO +
-                ", userContestId='" + userContestId + '\'' +
+
                 ", userId='" + userId + '\'' +
                 ", answer='" + answer + '\'' +
                 ", points=" + points +
@@ -53,13 +52,6 @@ public class UserAnswerDTO {
         this.userId = userId;
     }
 
-   public String getUserContestId() {
-        return userContestId;
-    }
-
-    public void setUserContestId(String userContestId) {
-        this.userContestId = userContestId;
-    }
 
     public String getAnswer() {
         return answer;

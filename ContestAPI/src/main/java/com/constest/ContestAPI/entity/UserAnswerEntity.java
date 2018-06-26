@@ -17,10 +17,9 @@ public class UserAnswerEntity {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = UserAnswerEntity.ID_COLUMN)
     private String userAnswerId;
-    private String userContestId;
     private String userId;
     private String answer;
-    private int points;
+    private Integer points;
     private Boolean skipped;
     private Timestamp timeOfAnswer;
 
@@ -54,14 +53,6 @@ public class UserAnswerEntity {
         this.contestQuestionEntity = contestQuestionEntity;
     }
 
-
-    public String getUserContestId() {
-        return userContestId;
-    }
-
-    public void setUserContestId(String userContestId) {
-        this.userContestId = userContestId;
-    }
 
     public String getAnswer() {
         return answer;
@@ -103,7 +94,6 @@ public class UserAnswerEntity {
     public String toString() {
         return "UserAnswerEntity{" +
                 "userAnswerId='" + userAnswerId + '\'' +
-                ", userContestId='" + userContestId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", answer='" + answer + '\'' +
                 ", points=" + points +
