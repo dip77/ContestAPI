@@ -3,7 +3,9 @@ package com.constest.ContestAPI.controller;
 import com.constest.ContestAPI.dto.UserAnswerDTO;
 import com.constest.ContestAPI.entity.UserAnswerEntity;
 import com.constest.ContestAPI.service.UserAnswerService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,11 +19,13 @@ public class UserAnswerController {
 
     @RequestMapping(method = RequestMethod.POST, value = "saveAnswer")
     public Boolean userAnswer(@RequestBody UserAnswerDTO userAnswerDTO) {
+
         Boolean userAnswerDTO1 = userAnswerService.save(userAnswerDTO);
+
         return userAnswerDTO1;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "getAnswer/{userAnswerId}")
+    @RequestMapping(method = RequestMethod.GET, value = "{userAnswerId}")
     public String getAnswer(@PathVariable String userAnswerId) {
         return (userAnswerService.getAnswer(userAnswerId));
     }

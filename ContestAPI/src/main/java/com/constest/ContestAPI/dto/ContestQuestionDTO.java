@@ -2,7 +2,7 @@ package com.constest.ContestAPI.dto;
 
 import com.constest.ContestAPI.entity.ContestEntity;
 
-public class    ContestQuestionDTO {
+public class ContestQuestionDTO {
     private ContestDTO contestDTO;
     private String questionId;
     private Integer points;
