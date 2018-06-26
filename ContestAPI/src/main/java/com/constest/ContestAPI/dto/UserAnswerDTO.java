@@ -31,6 +31,14 @@ public class UserAnswerDTO {
                 '}';
     }
 
+    public Boolean getSkipped() {
+        return skipped;
+    }
+
+    public void setSkipped(Boolean skipped) {
+        this.skipped = skipped;
+    }
+
     public ContestQuestionDTO getContestQuestionDTO() {
         return contestQuestionDTO;
     }
@@ -84,14 +92,6 @@ public class UserAnswerDTO {
 
     public void setPoints(int points) {
         this.points = points;
-    }
-
-    public Boolean getSkipped() {
-        return skipped;
-    }
-
-    public void setSkipped(Boolean skipped) {
-        skipped = skipped;
     }
 
     public Timestamp getTimeOfAnswer() {
