@@ -3,7 +3,6 @@ package com.constest.ContestAPI.controller;
 import com.constest.ContestAPI.dto.UserAnswerDTO;
 import com.constest.ContestAPI.entity.UserAnswerEntity;
 import com.constest.ContestAPI.service.UserAnswerService;
-import com.constest.ContestAPI.service.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
@@ -43,11 +42,4 @@ public class UserAnswerController {
     public String getFastestUser(@PathVariable String contestQuestionId) {
         return userAnswerService.getFastestAnswer(contestQuestionId);
     }
-
-    // @RequestMapping(method = RequestMethod.GET, value = "getUserContestPoints/{contestId}/{userId}")
-    // public Integer getUserContestPoints(@PathVariable String contestId, @PathVariable String userId) {
-    //     return userAnswerService.getUserContestPoints(contestId, userId);
-    // }
-
-
 }

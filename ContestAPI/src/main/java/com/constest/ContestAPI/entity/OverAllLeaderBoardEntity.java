@@ -1,20 +1,18 @@
 package com.constest.ContestAPI.entity;
 
+import com.constest.ContestAPI.dto.OverAllLeaderBoardDTO;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Comparator;
 
 @Entity
 @Table(name = OverAllLeaderBoardEntity.TABLE_NAME)
 public class OverAllLeaderBoardEntity {
     static final String TABLE_NAME = "leaderBoard";
-    static final String ID_COLUMN = "id";
+
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name =  OverAllLeaderBoardEntity.ID_COLUMN)
-    private String id;
     private String userId;
     private int overAllPoints;
     private int rank;
@@ -27,13 +25,6 @@ public class OverAllLeaderBoardEntity {
         this.rank = rank;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUserId() {
         return userId;
@@ -61,3 +52,5 @@ public class OverAllLeaderBoardEntity {
 
 
 }
+
+

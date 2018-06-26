@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface UserPointsRepository extends CrudRepository<UserPointsEntity,String> {
 
-    List<UserPointsEntity> findAllByUserIdAndFinalPoints(String userId, int finalPoints);
+    List<UserPointsEntity> findAllByUserId(String userId);
     List<UserPointsEntity> findAllByContestEntity(ContestEntity contestEntity);
 
 }

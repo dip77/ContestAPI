@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserHistoryInterface extends CrudRepository<OverAllLeaderBoardEntity,String> {
+public interface LeaderBoardInterface extends CrudRepository<OverAllLeaderBoardEntity,String> {
     List<OverAllLeaderBoardEntity> findAll();
+    OverAllLeaderBoardEntity getByUserId(String userId);
 }

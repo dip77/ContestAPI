@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -22,12 +24,6 @@ public class UserPointsController {
     {
         try {
             userPointsServiceInterface.save(userPointsDTO);
-            OverAllLeaderBoardDTO overAllLeaderBoardDTO = new OverAllLeaderBoardDTO();
-            overAllLeaderBoardDTO.setUserId(userPointsDTO.getUserId());
-            overAllLeaderBoardDTO.setOverAllPoints(userPointsDTO.getFinalPoints());
-            OverAllLeaderBoardEntity overAllLeaderBoardEntity = new OverAllLeaderBoardEntity();
-            BeanUtils.copyProperties(overAllLeaderBoardDTO,overAllLeaderBoardEntity);
-            userPointsServiceInterface.saveToHistory(overAllLeaderBoardEntity);
             return true;
         }
         catch (Exception exception)
@@ -37,7 +33,6 @@ public class UserPointsController {
         }
 
     }
-
 
     @RequestMapping(method = RequestMethod.GET,value = "/getAll")
     public List<UserPointsDTO> getAll()
@@ -52,9 +47,36 @@ public class UserPointsController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET,value = "/contest/user/{contestId}")
+    @RequestMapping(method = RequestMethod.GET,value = "/contest/getContestWiseLeaderBoard/{contestId}")
     public List<UserPointsDTO> getContestWiseLeaderBoard(@PathVariable("contestId") String contestId)
     {
         return userPointsServiceInterface.getByContestId(contestId);
     }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/contest/updateRank/{contestId}")
+    public List<UserPointsDTO> updateRank(@PathVariable("contestId") String contestId)
+    {
+        List<UserPointsDTO> userPointsDTOList =  userPointsServiceInterface.getByContestId(contestId);
+        Collections.sort(userPointsDTOList,Collections.reverseOrder(new SortbyFinalPoints()));
+        int index = 1;
+        for(UserPointsDTO userPointsDTO:userPointsDTOList)
+        {
+            userPointsDTO.setRank(index);
+            index++;
+            userPointsServiceInterface.save(userPointsDTO);
+        }
+        return userPointsDTOList;
+    }
+
 }
+
+class SortbyFinalPoints implements Comparator<UserPointsDTO>
+{
+    public int compare(UserPointsDTO a, UserPointsDTO b)
+    {
+        return a.getFinalPoints() - b.getFinalPoints();
+    }
+}
+
+
+

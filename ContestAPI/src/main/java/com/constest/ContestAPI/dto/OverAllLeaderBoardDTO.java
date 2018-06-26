@@ -3,16 +3,9 @@ package com.constest.ContestAPI.dto;
 public class OverAllLeaderBoardDTO {
     private String userId;
     private int overAllPoints;
-    private String id;
+
     private int rank;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public int getRank() {
         return rank;
@@ -43,7 +36,7 @@ public class OverAllLeaderBoardDTO {
         return "OverAllLeaderBoardDTO{" +
                 "userId='" + userId + '\'' +
                 ", overAllPoints=" + overAllPoints +
-                ", id='" + id + '\'' +
+              //  ", id='" + id + '\'' +
                 ", rank=" + rank +
                 '}';
     }
