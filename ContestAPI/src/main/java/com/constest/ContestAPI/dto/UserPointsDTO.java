@@ -1,5 +1,6 @@
 package com.constest.ContestAPI.dto;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class UserPointsDTO {
@@ -98,5 +99,15 @@ public class UserPointsDTO {
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+}
+
+class SortbyFinalPoints implements Comparator<UserPointsDTO>
+{
+    // Used for sorting in ascending order of
+    // roll number
+    public int compare(UserPointsDTO a, UserPointsDTO b)
+    {
+        return a.getFinalPoints() - b.getFinalPoints();
     }
 }

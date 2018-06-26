@@ -91,7 +91,7 @@ public class UserAnswerDTO {
     }
 
     public void setSkipped(Boolean skipped) {
-        skipped = skipped;
+        this.skipped = skipped;
     }
 
     public Timestamp getTimeOfAnswer() {

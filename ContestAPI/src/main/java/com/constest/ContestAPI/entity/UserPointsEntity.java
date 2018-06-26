@@ -1,10 +1,13 @@
 package com.constest.ContestAPI.entity;
 
 
+import com.constest.ContestAPI.dto.OverAllLeaderBoardDTO;
+import com.constest.ContestAPI.dto.UserPointsDTO;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Id;
 
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -121,3 +124,5 @@ public class UserPointsEntity {
         this.contestEntity = contestEntity;
     }
 }
+
+

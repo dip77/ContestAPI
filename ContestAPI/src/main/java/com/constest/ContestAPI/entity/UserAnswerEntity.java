@@ -81,7 +81,7 @@ public class UserAnswerEntity {
     }
 
     public void setSkipped(Boolean skipped) {
-        skipped = skipped;
+        this.skipped = skipped;
     }
 
     public String getUserId() {
