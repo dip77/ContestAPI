@@ -30,6 +30,14 @@ public class UserAnswerDTO {
                 '}';
     }
 
+    public Boolean getSkipped() {
+        return skipped;
+    }
+
+    public void setSkipped(Boolean skipped) {
+        this.skipped = skipped;
+    }
+
     public ContestQuestionDTO getContestQuestionDTO() {
         return contestQuestionDTO;
     }

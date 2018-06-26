@@ -41,6 +41,10 @@ public class UserAnswerEntity {
     //  UserPointsEntity userPointsEntity;
 
 
+    public Boolean getSkipped() {
+        return skipped;
+    }
+
     public ContestQuestionEntity getContestQuestionEntity() {
         return contestQuestionEntity;
     }
@@ -69,14 +73,6 @@ public class UserAnswerEntity {
 
     public Integer getPoints() {
         return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
-    }
-
-    public Boolean getSkipped() {
-        return skipped;
     }
 
     public void setSkipped(Boolean skipped) {
