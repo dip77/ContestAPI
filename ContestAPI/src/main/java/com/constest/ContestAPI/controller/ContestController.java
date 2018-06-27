@@ -14,12 +14,15 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.ParameterizedType;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +43,7 @@ public class ContestController {
     @RequestMapping(method = RequestMethod.POST, value = "/createContest")
     public Boolean saveContest(@RequestBody ContestDTO contestDTO) {
         ContestEntity contestEntity = new ContestEntity();
+
         contestEntity.setContestType(contestDTO.getContestType().toLowerCase());
         BeanUtils.copyProperties(contestDTO, contestEntity);
         return contestService.saveContest(contestEntity);
@@ -48,6 +52,8 @@ public class ContestController {
     //todo : Phani : Filter inactive contests in this api, get only active contests
     @RequestMapping(method = RequestMethod.GET, value = "/getAll")
     public List<ContestDTO> getAllContest() {
+
+
         List<ContestEntity> contestEntityList = contestService.getAll();
         List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
         for (ContestEntity contestEntity : contestEntityList) {
@@ -106,7 +112,7 @@ public class ContestController {
         }
 
         contestEntity = contestService.getAllContestQuestions(contestId);
-       ContestDTO contestDTO = new ContestDTO();
+        ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
         List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
         //this function will call API of Question microservice
@@ -116,16 +122,14 @@ public class ContestController {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
             System.out.println(contestQuestionDTO.getContestQuestionId());
-            QuestionDTO questionDTO = new QuestionDTO();
             UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
-//                System.out.println(contestQuestionEntity.getContestQuestionId()+" "+userId);
             UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
             System.out.println(userAnswerEntity + " user");
             if (userAnswerEntity != null) {
                 BeanUtils.copyProperties(userAnswerEntity, userAnswerDTO);
                 contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
-
             }
+
 
             contestQuestionDTO.setQuestionDTO(this.getQuestion(contestQuestionEntity.getQuestionId()));
 

@@ -15,8 +15,6 @@ public class  ContestQuestionDTO {
     private QuestionDTO questionDTO;
     private UserAnswerDTO userAnswerDTO;
 
-
-
     private List<UserAnswerDTO> allUserAnswerEntityList;
 
 

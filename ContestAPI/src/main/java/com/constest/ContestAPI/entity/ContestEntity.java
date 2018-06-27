@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -27,8 +28,8 @@ public class ContestEntity {
 
     private String contestName;
     private String contestType;
-    private String startDate;
-    private String endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
     private String categoryId;
     private String adminId;
     private Integer questionVisibilityDuration;
@@ -94,19 +95,19 @@ public class ContestEntity {
         this.contestType = contestType;
     }
 
-    public String getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 

@@ -24,6 +24,8 @@ public class UserAnswerEntity {
     private Boolean skipped;
     private Timestamp timeOfAnswer;
 
+
+
     public String getUserAnswerId() {
         return userAnswerId;
     }
