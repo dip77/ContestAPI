@@ -1,6 +1,7 @@
 package com.constest.ContestAPI.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

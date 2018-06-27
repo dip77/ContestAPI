@@ -107,6 +107,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         contestQuestionEntity.setContestQuestionId(contestQuestionId);
         Boolean checkIfExists = userAnswerRepository.existsByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);
         if (checkIfExists == false) {
+
             return null;
         }
         UserAnswerEntity userAnswerEntities = userAnswerRepository.getOneByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);

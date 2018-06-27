@@ -11,7 +11,7 @@ public interface ContestService {
      List<ContestEntity> getAll();
      List<ContestEntity> getAllByCategory(String categoryId);
      List<ContestEntity> getAllByContestType(String contestType);
-     ContestEntity getContestByAdmin(String adminId);
+     List<ContestEntity> getContestByAdmin(String adminId);
     ContestEntity getAllContestQuestions(String contestId);
 
 
