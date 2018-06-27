@@ -139,9 +139,9 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public String getFastestAnswer(String customQuesionId){
-        String userId = userAnswerRepository.getFastestTime(customQuesionId);
-        System.out.println(userId);
-        return userId;
+        String userAnswerId = userAnswerRepository.getFastestTime(customQuesionId);
+        System.out.println(userAnswerId);
+        return userAnswerId;
     }
 
 
