@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 //todo : phani .. change the path from contest to userAnswers etc..
-@RequestMapping("/contest/")
+@RequestMapping("/userAnswers/")
 public class UserAnswerController {
 
     @Autowired
@@ -41,10 +41,10 @@ public class UserAnswerController {
     }
 
     //todo : phani : not to use this method outside
-    @RequestMapping(method = RequestMethod.GET, value = "getFastestUser/{contestQuestionId}")
-    public String getFastestUser(@PathVariable String contestQuestionId) {
-        return userAnswerService.getFastestAnswer(contestQuestionId);
-    }
+//    @RequestMapping(method = RequestMethod.GET, value = "getFastestUser/{contestQuestionId}")
+//    public String getFastestUser(@PathVariable String contestQuestionId) {
+//        return userAnswerService.getFastestAnswer(contestQuestionId);
+//    }
 
 
     @RequestMapping(method = RequestMethod.GET, value = "getUserEntity/{userId}/{contestQuestionId}")
@@ -57,6 +57,11 @@ public class UserAnswerController {
     //     return userAnswerService.getUserContestPoints(contestId, userId);
     // }
 
+//    @RequestMapping(method = RequestMethod.GET,value = "test/{customQuesionId}")
+//    public  Boolean test(@PathVariable String customQuesionId){
+//        userAnswerService.getFastestAnswer(customQuesionId);
+//        return true;
+//    }
 
 
 

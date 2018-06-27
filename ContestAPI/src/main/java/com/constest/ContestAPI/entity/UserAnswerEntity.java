@@ -1,5 +1,6 @@
 package com.constest.ContestAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -32,6 +33,7 @@ public class UserAnswerEntity {
     }
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "contest_question_id")
     ContestQuestionEntity contestQuestionEntity;
 
