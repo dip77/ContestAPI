@@ -1,6 +1,7 @@
 package com.constest.ContestAPI.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class UserAnswerEntity {
     private Integer points;
     private Boolean skipped;
     private String timeOfAnswer;
-    private Boolean answered;
+    private Boolean answered=false;
 
     public String getUserAnswerId() {
         return userAnswerId;

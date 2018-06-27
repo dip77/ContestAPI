@@ -22,7 +22,6 @@ public class ContestDTO {
     private Integer numberOfQuestions;
     private List<ContestQuestionDTO> contestQuestionDTOList;
 
-
     public List<ContestQuestionDTO> getContestQuestionDTOList() {
         return contestQuestionDTOList;
     }

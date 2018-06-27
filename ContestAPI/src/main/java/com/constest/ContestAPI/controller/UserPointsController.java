@@ -1,20 +1,13 @@
 package com.constest.ContestAPI.controller;
-
-
-import com.constest.ContestAPI.dto.OverAllLeaderBoardDTO;
 import com.constest.ContestAPI.dto.UserPointsDTO;
-import com.constest.ContestAPI.entity.OverAllLeaderBoardEntity;
+import com.constest.ContestAPI.entity.LeaderBoard;
 import com.constest.ContestAPI.service.UserPointsService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
-//todo : phani : base uri is missing from the controller
+@RequestMapping("/userPoints/")
 public class UserPointsController {
 
     @Autowired
@@ -23,17 +16,7 @@ public class UserPointsController {
     @RequestMapping(method = RequestMethod.POST,value = "/contest/subscribe")
     public boolean subscribe(@RequestBody UserPointsDTO userPointsDTO)
     {
-        //todo : phani : why try catch block here?
-        try {
-            userPointsServiceInterface.save(userPointsDTO);
-            return true;
-        }
-        catch (Exception exception)
-        {
-            System.out.println(exception.toString());
-            return false;
-        }
-
+        return userPointsServiceInterface.save(userPointsDTO);
     }
 
 
@@ -43,42 +26,21 @@ public class UserPointsController {
         return userPointsServiceInterface.getAllContests();
     }
 
+
     @RequestMapping(method = RequestMethod.GET,value = "/contest/getOverAllLeaderBoard")
-    public List<OverAllLeaderBoardDTO> overAllLeadership()
+    public List<LeaderBoard> overAllLeadership()
     {
-        return userPointsServiceInterface.getAll();
+        return userPointsServiceInterface.getOverAllLeaderBoard();
     }
 
 
     @RequestMapping(method = RequestMethod.GET,value = "/contest/getContestWiseLeaderBoard/{contestId}")
-    public List<UserPointsDTO> getContestWiseLeaderBoard(@PathVariable("contestId") String contestId)
+    public List<LeaderBoard> getContestWiseLeaderBoard(@PathVariable("contestId") String contestId)
     {
-        return userPointsServiceInterface.getByContestId(contestId);
+        return userPointsServiceInterface.getContestWiseLeaderBoard(contestId);
     }
 
-    @RequestMapping(method = RequestMethod.GET,value = "/contest/updateRank/{contestId}")
-    public List<UserPointsDTO> updateRank(@PathVariable("contestId") String contestId)
-    {
-        List<UserPointsDTO> userPointsDTOList =  userPointsServiceInterface.getByContestId(contestId);
-        Collections.sort(userPointsDTOList,Collections.reverseOrder(new SortbyFinalPoints()));
-        int index = 1;
-        for(UserPointsDTO userPointsDTO:userPointsDTOList)
-        {
-            userPointsDTO.setRank(index);
-            index++;
-            userPointsServiceInterface.save(userPointsDTO);
-        }
-        return userPointsDTOList;
-    }
 
-}
-
-class SortbyFinalPoints implements Comparator<UserPointsDTO>
-{
-    public int compare(UserPointsDTO a, UserPointsDTO b)
-    {
-        return a.getFinalPoints() - b.getFinalPoints();
-    }
 }
 
 
