@@ -7,10 +7,12 @@ import com.constest.ContestAPI.dto.UserAnswerDTO;
 import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import com.constest.ContestAPI.entity.UserAnswerEntity;
+import com.constest.ContestAPI.service.ContestQuestionService;
 import com.constest.ContestAPI.service.UserAnswerService;
 import com.constest.ContestAPI.service.impl.ContestServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,9 @@ public class ContestController {
 
     @Autowired
     private ContestServiceImpl contestService;
+
+    @Autowired
+    private ContestQuestionService contestQuestionService;
 
     @Autowired
     private UserAnswerService userAnswerService;
@@ -91,30 +96,36 @@ public class ContestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestQuestions/{contestId}/{userId}")
     public ContestDTO getContestQuestions(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
-        ContestEntity contestEntity = contestService.getAllContestQuestions(contestId);
-        ContestDTO contestDTO = new ContestDTO();
+
+        ContestEntity contestEntity = new ContestEntity();
+        contestEntity.setContestId(contestId);
+        boolean isContestExists = contestQuestionService.isContestExists(contestEntity);
+
+        if (!isContestExists) {
+            return null;
+        }
+
+        contestEntity = contestService.getAllContestQuestions(contestId);
+       ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
         List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
         //this function will call API of Question microservice
 
         int count = 0;
-        //todo : phani : based on the question id, select the data from the questionDTOList and add to the list.
-        // todo : use hash map here .. instead of array list, or change the call to get by each question
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
             System.out.println(contestQuestionDTO.getContestQuestionId());
             QuestionDTO questionDTO = new QuestionDTO();
             UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
-//            try {
-//                UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
-//                if (userAnswerEntity != null)
-//                    BeanUtils.copyProperties(userAnswerEntity, userAnswerDTO);
-//                contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+//                System.out.println(contestQuestionEntity.getContestQuestionId()+" "+userId);
+            UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
+            System.out.println(userAnswerEntity + " user");
+            if (userAnswerEntity != null) {
+                BeanUtils.copyProperties(userAnswerEntity, userAnswerDTO);
+                contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
+
+            }
 
             contestQuestionDTO.setQuestionDTO(this.getQuestion(contestQuestionEntity.getQuestionId()));
 

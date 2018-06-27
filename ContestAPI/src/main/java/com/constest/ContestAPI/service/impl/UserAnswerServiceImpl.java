@@ -99,6 +99,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(contestQuestionId);
         Boolean checkIfExists = userAnswerRepository.existsByUserIdAndContestQuestionEntity(userId,contestQuestionEntity);
+        System.out.println(checkIfExists+" check");
         if(checkIfExists == false){
             return null;
         }
