@@ -28,7 +28,7 @@ public interface UserAnswerRepository extends CrudRepository<UserAnswerEntity, S
 
     public UserAnswerEntity getOneByUserIdAndContestQuestionEntity(String userId,ContestQuestionEntity contestQuestionEntity);
 
-    @Query(nativeQuery = true,value = "select user_id from user_answer where contest_question_id = ?#{[0]} and time_of_answer = (select min(time_of_answer) from user_answer)  ")
+    @Query(nativeQuery = true,value = "select user_answer_id from user_answer where contest_question_id = ?#{[0]} and time_of_answer = (select min(time_of_answer) from user_answer)  ")
     String getFastestTime(String contest_question_id);
 
     public Boolean existsByUserIdAndContestQuestionEntity(String userId,ContestQuestionEntity contestQuestionEntity);
