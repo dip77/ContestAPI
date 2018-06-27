@@ -106,6 +106,7 @@ public class UserPointsServiceImpl implements UserPointsService {
         return userPointsDTOList;
     }
 
+    //todo : phani : don't compute the rank for each user and store in the db, instead use
     @Override
     public boolean updatePoints(UserPointsDTO userPointsDTO) {
         UserPointsEntity userPointsEntity = new UserPointsEntity();
@@ -127,6 +128,7 @@ public class UserPointsServiceImpl implements UserPointsService {
         return true;
     }
 
+    //todo : phani : overall leader board also should be based on the query
     @Override
     public boolean saveToHistory(OverAllLeaderBoardEntity overAllLeaderBoardEntity) {
         userHistoryInterface.save(overAllLeaderBoardEntity);

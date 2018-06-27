@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @RestController
+//todo : phani : base uri is missing from the controller
 public class UserPointsController {
 
     @Autowired
@@ -22,6 +23,7 @@ public class UserPointsController {
     @RequestMapping(method = RequestMethod.POST,value = "/contest/subscribe")
     public boolean subscribe(@RequestBody UserPointsDTO userPointsDTO)
     {
+        //todo : phani : why try catch block here?
         try {
             userPointsServiceInterface.save(userPointsDTO);
             return true;
@@ -33,6 +35,7 @@ public class UserPointsController {
         }
 
     }
+
 
     @RequestMapping(method = RequestMethod.GET,value = "/getAll")
     public List<UserPointsDTO> getAll()

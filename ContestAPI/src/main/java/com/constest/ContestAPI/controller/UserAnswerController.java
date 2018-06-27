@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+//todo : phani .. change the path from contest to userAnswers etc..
 @RequestMapping("/contest/")
 public class UserAnswerController {
 
@@ -22,6 +23,7 @@ public class UserAnswerController {
         return userAnswerDTO1;
     }
 
+    // todo : phani : remove this method
     @RequestMapping(method = RequestMethod.GET, value = "{userAnswerId}")
     public String getAnswer(@PathVariable String userAnswerId) {
         return (userAnswerService.getAnswer(userAnswerId));
@@ -38,6 +40,7 @@ public class UserAnswerController {
         return userAnswerService.getUserScore(userId);
     }
 
+    //todo : phani : not to use this method outside
     @RequestMapping(method = RequestMethod.GET, value = "getFastestUser/{contestQuestionId}")
     public String getFastestUser(@PathVariable String contestQuestionId) {
         return userAnswerService.getFastestAnswer(contestQuestionId);

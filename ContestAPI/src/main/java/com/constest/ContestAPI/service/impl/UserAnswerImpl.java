@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Service
 
+//todo : phani : change the name of the class to UserAnswerServiceImpl
 public class UserAnswerImpl implements UserAnswerService {
 
     @Autowired
@@ -22,12 +23,14 @@ public class UserAnswerImpl implements UserAnswerService {
 
     @Override
     public Boolean save(UserAnswerDTO userAnswerDTO) {
+        //todo : phani : need to set the answer time on the backend, not take data from android app
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
         ContestQuestionEntity contestQuestionEntity=new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
         userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
         System.out.println(userAnswerEntity);
+        //todo : phani .. what is the need of try catch bock here?
         try {
             userAnswerRepository.save(userAnswerEntity);
             return true;
@@ -42,6 +45,7 @@ public class UserAnswerImpl implements UserAnswerService {
         return userAnswerEntity;
     }
 
+    //todo : remove this method
     @Override
     public String getAnswer(String userAnswerId) {
         UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
@@ -49,6 +53,7 @@ public class UserAnswerImpl implements UserAnswerService {
         return answer;
     }
 
+    //todo : phani : remove this, this needs to be done by save method itself
     @Override
     public Boolean setAnswer(String userAnswerId, String answer) {
         UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
@@ -90,6 +95,7 @@ public class UserAnswerImpl implements UserAnswerService {
     //remove user
     @Override
     public String getFastestAnswer(String contestQuestionId) {
+        //todo : phani : change this method to use custom Query .. by using select min(time) .. etc.. not develop logic like selecting all answers and getting the first from the list
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(contestQuestionId);
         List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.getByContestQuestionEntity(contestQuestionEntity);
