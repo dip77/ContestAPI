@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +32,11 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
         userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
-        userAnswerEntity.setTimeOfAnswer(new Timestamp(System.currentTimeMillis()));
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+
+        userAnswerEntity.setTimeOfAnswer(dateFormat.format(cal.getTime()));
         System.out.println(userAnswerEntity);
         //todo : phani .. what is the need of try catch bock here?
         userAnswerRepository.save(userAnswerEntity);
@@ -44,40 +51,40 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     }
 
     //todo : remove this method
-    @Override
-    public String getAnswer(String userAnswerId) {
-        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-        String answer = userAnswerEntity.getAnswer();
-        return answer;
-    }
+//    @Override
+//    public String getAnswer(String userAnswerId) {
+//        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
+//        String answer = userAnswerEntity.getAnswer();
+//        return answer;
+//    }
 
-    //todo : phani : remove this, this needs to be done by save method itself
-    @Override
-    public Boolean setAnswer(String userAnswerId, String answer) {
-        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-        userAnswerEntity.setAnswer(answer);
-        return true;
-    }
-
+    //    //todo : phani : remove this, this needs to be done by save method itself
+//    @Override
+//    public Boolean setAnswer(String userAnswerId, String answer) {
+//        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
+//        userAnswerEntity.setAnswer(answer);
+//        return true;
+//    }
+//
     @Override
     public List<UserAnswerEntity> getUserAllAnswers(String userId) {
         List<UserAnswerEntity> userAnswerEntities = (List<UserAnswerEntity>) userAnswerRepository.findAllByUserId(userId);
         return userAnswerEntities;
     }
 
-    @Override
-    public Timestamp getAnswerTime(String userAnswerId) {
-        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-        Timestamp timestamp = userAnswerEntity.getTimeOfAnswer();
-        return timestamp;
-    }
-
-    @Override
-    public Boolean setAnswerTime(String userAnswerId, Timestamp timestamp) {
-        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-        userAnswerEntity.setTimeOfAnswer(timestamp);
-        return true;
-    }
+//    @Override
+//    public Timestamp getAnswerTime(String userAnswerId) {
+//        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
+//        Timestamp timestamp = userAnswerEntity.getTimeOfAnswer();
+//        return timestamp;
+//    }
+//
+//    @Override
+//    public Boolean setAnswerTime(String userAnswerId, Timestamp timestamp) {
+//        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
+//        userAnswerEntity.setTimeOfAnswer(timestamp);
+//        return true;
+//    }
 
 //    @Override
 //    public Boolean getIfSkipped(String contestQuestionId, String userId) {
@@ -98,15 +105,13 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(contestQuestionId);
-        Boolean checkIfExists = userAnswerRepository.existsByUserIdAndContestQuestionEntity(userId,contestQuestionEntity);
-        if(checkIfExists == false){
+        Boolean checkIfExists = userAnswerRepository.existsByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);
+        if (checkIfExists == false) {
             return null;
         }
         UserAnswerEntity userAnswerEntities = userAnswerRepository.getOneByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);
         return userAnswerEntities;
     }
-
-
 
 
 //    @Override
@@ -127,18 +132,18 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 //    }
 
 
-    @Override
-    public int getUserScore(String userId) {
-        List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.findAllByUserId(userId);
-        int userScore = 0;
-        for (UserAnswerEntity userAnswerEntity : userAnswerEntities) {
-            userScore += userAnswerEntity.getPoints();
-        }
-        return userScore;
-    }
+//    @Override
+//    public int getUserScore(String userId) {
+//        List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.findAllByUserId(userId);
+//        int userScore = 0;
+//        for (UserAnswerEntity userAnswerEntity : userAnswerEntities) {
+//            userScore += userAnswerEntity.getPoints();
+//        }
+//        return userScore;
+//    }
 
     @Override
-    public String getFastestAnswer(String customQuesionId){
+    public String getFastestAnswer(String customQuesionId) {
         String userAnswerId = userAnswerRepository.getFastestTime(customQuesionId);
         System.out.println(userAnswerId);
         return userAnswerId;
