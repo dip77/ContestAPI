@@ -4,7 +4,6 @@ import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.List;
 
 public class ContestDTO {
@@ -12,8 +11,8 @@ public class ContestDTO {
     private String contestId;
     private String contestName;
     private String contestType;
-    private Timestamp startDate;
-    private Timestamp endDate;
+    private String startDate;
+    private String endDate;
     private String categoryId;
     private String adminId;
     private Integer questionVisibilityDuration;
@@ -22,7 +21,6 @@ public class ContestDTO {
     private String email;
     private Integer numberOfQuestions;
     private List<ContestQuestionDTO> contestQuestionDTOList;
-
 
     public List<ContestQuestionDTO> getContestQuestionDTOList() {
         return contestQuestionDTOList;
@@ -55,22 +53,6 @@ public class ContestDTO {
                 ", categoryName='" + categoryName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    public Timestamp getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
-
-    public Timestamp getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Timestamp endDate) {
-        this.endDate = endDate;
     }
 
     public String getCategoryName() {
@@ -111,6 +93,22 @@ public class ContestDTO {
 
     public void setContestType(String contestType) {
         this.contestType = contestType;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getCategoryId() {

@@ -43,7 +43,7 @@ public class ContestController {
     @RequestMapping(method = RequestMethod.POST, value = "/createContest")
     public Boolean saveContest(@RequestBody ContestDTO contestDTO) {
         ContestEntity contestEntity = new ContestEntity();
-
+        System.out.println(contestDTO.getStartDate());
         contestEntity.setContestType(contestDTO.getContestType().toLowerCase());
         BeanUtils.copyProperties(contestDTO, contestEntity);
         return contestService.saveContest(contestEntity);
