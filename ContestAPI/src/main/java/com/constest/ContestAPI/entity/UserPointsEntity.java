@@ -1,14 +1,10 @@
 package com.constest.ContestAPI.entity;
 
 
-import com.constest.ContestAPI.dto.OverAllLeaderBoardDTO;
-import com.constest.ContestAPI.dto.UserPointsDTO;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Id;
 
 import javax.persistence.*;
-import java.util.Comparator;
-import java.util.List;
 
 
 @Entity
@@ -23,7 +19,9 @@ public class UserPointsEntity {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = UserPointsEntity.ID_COLUMN)
     private String userContestId;
+    @Column(name = "user_id")
     private String userId;
+    @Column(name = "final_points")
     private int finalPoints ;
     private int easyCorrectlyAnswered ;
     private int mediumCorrectlyAnswered ;
