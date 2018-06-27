@@ -23,10 +23,8 @@ public class UserAnswerEntity {
     private String answer;
     private Integer points;
     private Boolean skipped;
-    private Timestamp timeOfAnswer;
+    private String timeOfAnswer;
     private Boolean answered=false;
-
-
 
     public String getUserAnswerId() {
         return userAnswerId;
@@ -88,11 +86,11 @@ public class UserAnswerEntity {
         this.points = points;
     }
 
-    public Timestamp getTimeOfAnswer() {
+    public String getTimeOfAnswer() {
         return timeOfAnswer;
     }
 
-    public void setTimeOfAnswer(Timestamp timeOfAnswer) {
+    public void setTimeOfAnswer(String timeOfAnswer) {
         this.timeOfAnswer = timeOfAnswer;
     }
 
