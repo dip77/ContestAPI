@@ -1,6 +1,7 @@
 package com.constest.ContestAPI.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class ContestQuestionEntity {
 
 
     @OneToMany
+    @JsonManagedReference
     @JoinColumn(name = "contest_question_id")
     private List<UserAnswerEntity> userAnswerEntityList;
 
