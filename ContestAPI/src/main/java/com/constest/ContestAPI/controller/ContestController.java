@@ -10,6 +10,7 @@ import com.constest.ContestAPI.entity.UserAnswerEntity;
 import com.constest.ContestAPI.service.ContestQuestionService;
 import com.constest.ContestAPI.service.UserAnswerService;
 import com.constest.ContestAPI.service.impl.ContestServiceImpl;
+import com.constest.ContestAPI.util.ValidationUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,9 +22,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.ParameterizedType;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,15 +52,16 @@ public class ContestController {
         return contestService.saveContest(contestEntity);
     }
 
-    //todo : Phani : Filter inactive contests in this api, get only active contests
     @RequestMapping(method = RequestMethod.GET, value = "/getAll")
     public List<ContestDTO> getAllContest() {
-
 
         List<ContestEntity> contestEntityList = contestService.getAll();
         List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
         for (ContestEntity contestEntity : contestEntityList) {
             ContestDTO contestDTO = new ContestDTO();
+            if (!ValidationUtil.compare(contestEntity.getEndDate())) {
+                continue;
+            }
             //  System.out.println(contestEntity.getContestQuestionEntityList());
             List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
             BeanUtils.copyProperties(contestEntity, contestDTO);
@@ -73,12 +77,15 @@ public class ContestController {
     }
 
 
-    //todo : phani : get the active contest only
     @RequestMapping(method = RequestMethod.GET, value = "/getContestsByCategory/{categoryId}")
     public List<ContestDTO> getContestsByCategory(@PathVariable("categoryId") String categoryId) {
         List<ContestEntity> contestEntityList = contestService.getAllByCategory(categoryId);
         List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
         for (ContestEntity contestEntity : contestEntityList) {
+            if (!ValidationUtil.compare(contestEntity.getEndDate())) {
+                continue;
+            }
+
             ContestDTO contestDTO = new ContestDTO();
             BeanUtils.copyProperties(contestEntity, contestDTO);
             contestDTOList.add(contestDTO);
@@ -86,12 +93,15 @@ public class ContestController {
         return contestDTOList;
     }
 
-    //todo : phani : get the active contest only
     @RequestMapping(method = RequestMethod.GET, value = "/getContestsByType/{contestType}")
     public List<ContestDTO> getContestsByType(@PathVariable("contestType") String contestType) {
         List<ContestEntity> contestEntityList = contestService.getAllByContestType(contestType);
         List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
         for (ContestEntity contestEntity : contestEntityList) {
+            if (!ValidationUtil.compare(contestEntity.getEndDate())) {
+                continue;
+            }
+
             ContestDTO contestDTO = new ContestDTO();
             BeanUtils.copyProperties(contestEntity, contestDTO);
             contestDTOList.add(contestDTO);
@@ -142,13 +152,15 @@ public class ContestController {
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestByAdminId/{adminId}")
-    public ContestDTO getContestsByTAdmin(@PathVariable("adminId") String adminId) {
-        ContestEntity contestEntity = contestService.getContestByAdmin(adminId);
-        ContestDTO contestDTO = new ContestDTO();
-        if (contestEntity == null)
-            return contestDTO;
-        BeanUtils.copyProperties(contestEntity, contestDTO);
-        return contestDTO;
+    public List<ContestDTO> getContestsByTAdmin(@PathVariable("adminId") String adminId) {
+        List<ContestEntity> contestEntityList = contestService.getContestByAdmin(adminId);
+        List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
+        for (ContestEntity contestEntity : contestEntityList) {
+            ContestDTO contestDTO = new ContestDTO();
+            BeanUtils.copyProperties(contestEntity, contestDTO);
+            contestDTOList.add(contestDTO);
+        }
+        return contestDTOList;
 
     }
 
