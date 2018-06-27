@@ -11,9 +11,8 @@ public class UserAnswerDTO {
     private String answer;
     private Integer points;
     private Boolean skipped;
-    private Timestamp timeOfAnswer;
-    private  Boolean answered;
-
+    private String timeOfAnswer;
+    private Boolean answered;
 
 
     public ContestQuestionDTO getContestQuestionDTO() {
@@ -23,6 +22,7 @@ public class UserAnswerDTO {
     public void setContestQuestionDTO(ContestQuestionDTO contestQuestionDTO) {
         this.contestQuestionDTO = contestQuestionDTO;
     }
+
     public String getUserAnswerId() {
         return userAnswerId;
     }
@@ -64,11 +64,11 @@ public class UserAnswerDTO {
         this.skipped = skipped;
     }
 
-    public Timestamp getTimeOfAnswer() {
+    public String getTimeOfAnswer() {
         return timeOfAnswer;
     }
 
-    public void setTimeOfAnswer(Timestamp timeOfAnswer) {
+    public void setTimeOfAnswer(String timeOfAnswer) {
         this.timeOfAnswer = timeOfAnswer;
     }
 
