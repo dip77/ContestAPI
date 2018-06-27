@@ -23,6 +23,7 @@ public class UserAnswerEntity {
     private Integer points;
     private Boolean skipped;
     private Timestamp timeOfAnswer;
+    private Boolean answered;
 
 
 
@@ -94,6 +95,18 @@ public class UserAnswerEntity {
         this.timeOfAnswer = timeOfAnswer;
     }
 
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Boolean getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(Boolean answered) {
+        this.answered = answered;
+    }
+
     @Override
     public String toString() {
         return "UserAnswerEntity{" +
@@ -103,6 +116,7 @@ public class UserAnswerEntity {
                 ", points=" + points +
                 ", skipped=" + skipped +
                 ", timeOfAnswer=" + timeOfAnswer +
+                ", answered=" + answered +
                 ", contestQuestionEntity=" + contestQuestionEntity +
                 '}';
     }
