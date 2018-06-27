@@ -45,6 +45,7 @@ public class ContestServiceImpl implements ContestService {
 
     @Override
     public ContestEntity getAllContestQuestions(String contestId) {
+
         return contestRepository.findById(contestId).get();
     }
 }

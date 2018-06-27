@@ -7,10 +7,12 @@ import com.constest.ContestAPI.dto.UserAnswerDTO;
 import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import com.constest.ContestAPI.entity.UserAnswerEntity;
+import com.constest.ContestAPI.service.ContestQuestionService;
 import com.constest.ContestAPI.service.UserAnswerService;
 import com.constest.ContestAPI.service.impl.ContestServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.ParameterizedType;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -27,6 +30,9 @@ public class ContestController {
 
     @Autowired
     private ContestServiceImpl contestService;
+
+    @Autowired
+    private ContestQuestionService contestQuestionService;
 
     @Autowired
     private UserAnswerService userAnswerService;
@@ -88,34 +94,41 @@ public class ContestController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getContestQuestions/{contestId}")
-    public ContestDTO getContestQuestions(@PathVariable("contestId") String contestId) {
-        ContestEntity contestEntity = contestService.getAllContestQuestions(contestId);
-        ContestDTO contestDTO = new ContestDTO();
+    @RequestMapping(method = RequestMethod.GET, value = "/getContestQuestions/{contestId}/{userId}")
+    public ContestDTO getContestQuestions(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
+
+        ContestEntity contestEntity = new ContestEntity();
+        contestEntity.setContestId(contestId);
+        boolean isContestExists = contestQuestionService.isContestExists(contestEntity);
+
+        if (!isContestExists) {
+            return null;
+        }
+
+        contestEntity = contestService.getAllContestQuestions(contestId);
+       ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
         List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
         //this function will call API of Question microservice
-        List<QuestionDTO> questionDTOList = this.getQuestions(contestEntity.getContestQuestionEntityList());
-        System.out.println(contestEntity.getContestQuestionEntityList().size() + " size contest question");
-        System.out.println(questionDTOList.size() + " size question dto list");
 
         int count = 0;
-        //todo : phani : based on the question id, select the data from the questionDTOList and add to the list.
-        // todo : use hash map here .. instead of array list, or change the call to get by each question
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
             System.out.println(contestQuestionDTO.getContestQuestionId());
-           // QuestionDTO questionDTO = new QuestionDTO();
-//            UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
-//            UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionDTO.getContestQuestionId());
-//            if (userAnswerEntity != null)
-//                BeanUtils.copyProperties(userAnswerEntity, userAnswerDTO);
-//            contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
+            QuestionDTO questionDTO = new QuestionDTO();
+            UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
+//                System.out.println(contestQuestionEntity.getContestQuestionId()+" "+userId);
+            UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
+            System.out.println(userAnswerEntity + " user");
+            if (userAnswerEntity != null) {
+                BeanUtils.copyProperties(userAnswerEntity, userAnswerDTO);
+                contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
 
+            }
 
-            if (count < questionDTOList.size())
-                contestQuestionDTO.setQuestionDTO(questionDTOList.get(count));
+            contestQuestionDTO.setQuestionDTO(this.getQuestion(contestQuestionEntity.getQuestionId()));
+
             count++;
             contestQuestionDTOList.add(contestQuestionDTO);
         }
@@ -135,33 +148,24 @@ public class ContestController {
 
     }
 
-    public List<QuestionDTO> getQuestions(List<ContestQuestionEntity> contestQuestionEntityList) {
-        List<QuestionDTO> questionDTOList = null;
-        List<String> questionIds = new ArrayList<String>();
-        Boolean returnVal;
-        for (ContestQuestionEntity contestQuestionEntity : contestQuestionEntityList) {
-            questionIds.add(contestQuestionEntity.getQuestionId());
-        }
+    public QuestionDTO getQuestion(String questionId) {
+        System.out.println(questionId);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        String URL = "http://10.177.2.15:8080/question/getQuestions";
-        HttpEntity<Object> entity = new HttpEntity<Object>(questionIds, httpHeaders);
-        ResponseEntity<List<QuestionDTO>> rs = restTemplate.exchange(URL, HttpMethod.POST,
-                entity, new ParameterizedTypeReference<List<QuestionDTO>>() {
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("questionId", questionId);
+        String URL = "http://10.177.2.15:8080/question/getOne/" + questionId;
+        HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
+        ResponseEntity<QuestionDTO> rs = restTemplate.exchange(URL, HttpMethod.GET,
+                entity, new ParameterizedTypeReference<QuestionDTO>() {
                 });
         if (rs.getStatusCode() == HttpStatus.OK) {
-            returnVal = true;
-            questionDTOList = rs.getBody();
-            //   System.out.println("YEs"+questionDTOList);
-            //UrlEntity urlEntity = new UrlEntity();
-        } else {
-            System.out.println("failed");
-            returnVal = false;
+            System.out.println(restTemplate.getUriTemplateHandler().toString());
+            return rs.getBody();
         }
 
-
-        return questionDTOList;
+        return null;
 
     }
 

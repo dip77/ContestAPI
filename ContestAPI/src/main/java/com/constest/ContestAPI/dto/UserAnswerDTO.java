@@ -12,22 +12,9 @@ public class UserAnswerDTO {
     private Integer points;
     private Boolean skipped;
     private Timestamp timeOfAnswer;
+    private  Boolean answered;
 
 
-    @Override
-    public String toString() {
-        return "UserAnswerDTO{" +
-                "userAnswerId='" + userAnswerId + '\'' +
-
-                ", contestQuestionDTO=" + contestQuestionDTO +
-
-                ", userId='" + userId + '\'' +
-                ", answer='" + answer + '\'' +
-                ", points=" + points +
-                ", skipped=" + skipped +
-                ", timeOfAnswer=" + timeOfAnswer +
-                '}';
-    }
 
     public ContestQuestionDTO getContestQuestionDTO() {
         return contestQuestionDTO;
@@ -85,4 +72,29 @@ public class UserAnswerDTO {
         this.timeOfAnswer = timeOfAnswer;
     }
 
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Boolean getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(Boolean answered) {
+        this.answered = answered;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAnswerDTO{" +
+                "userAnswerId='" + userAnswerId + '\'' +
+                ", contestQuestionDTO=" + contestQuestionDTO +
+                ", userId='" + userId + '\'' +
+                ", answer='" + answer + '\'' +
+                ", points=" + points +
+                ", skipped=" + skipped +
+                ", timeOfAnswer=" + timeOfAnswer +
+                ", answered=" + answered +
+                '}';
+    }
 }

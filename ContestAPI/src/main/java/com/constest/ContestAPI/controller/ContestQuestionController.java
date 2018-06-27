@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 //todo : phani .. change the path from contest to contestQuestion etc...
-@RequestMapping(value = "/contest")
+@RequestMapping(value = "/contestQuestion")
 public class ContestQuestionController {
 
     @Autowired

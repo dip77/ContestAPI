@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 
 //todo : phani : change the name of the class to UserAnswerServiceImpl
-public class UserAnswerImpl implements UserAnswerService {
+public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Autowired
     UserAnswerRepository userAnswerRepository;
@@ -26,18 +26,16 @@ public class UserAnswerImpl implements UserAnswerService {
         //todo : phani : need to set the answer time on the backend, not take data from android app
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
-        ContestQuestionEntity contestQuestionEntity=new ContestQuestionEntity();
+        ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
         userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
+        userAnswerEntity.setTimeOfAnswer(new Timestamp(System.currentTimeMillis()));
         System.out.println(userAnswerEntity);
         //todo : phani .. what is the need of try catch bock here?
-        try {
-            userAnswerRepository.save(userAnswerEntity);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        userAnswerRepository.save(userAnswerEntity);
+        return true;
     }
+
 
     @Override
     public Optional<UserAnswerEntity> getSingleUser(String userAnswerId) {
@@ -93,32 +91,23 @@ public class UserAnswerImpl implements UserAnswerService {
 
 
     //remove user
-    @Override
-    public String getFastestAnswer(String contestQuestionId) {
-        //todo : phani : change this method to use custom Query .. by using select min(time) .. etc.. not develop logic like selecting all answers and getting the first from the list
-        ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
-        contestQuestionEntity.setContestQuestionId(contestQuestionId);
-        List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.getByContestQuestionEntity(contestQuestionEntity);
-        UserAnswerEntity userAnswerEntity1 = new UserAnswerEntity();//= userAnswerEntities.get(0);
-        // userAnswerEntity1.getContestQuestionEntity().getContestEntity();
-        Timestamp timestamp = userAnswerEntities.get(0).getTimeOfAnswer();
-        String userId = null;
-        for (UserAnswerEntity userAnswerEntity : userAnswerEntities) {
-            if (timestamp.after(userAnswerEntity.getTimeOfAnswer())) {
-                timestamp = userAnswerEntity.getTimeOfAnswer();
-                userId = userAnswerEntity.getUserId();
-            }
-        }
-        return userId;
-    }
+
 
     @Override
     public UserAnswerEntity getUserEntity(String userId, String contestQuestionId) {
+
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(contestQuestionId);
-        UserAnswerEntity userAnswerEntities = userAnswerRepository.getOneByUserIdAndContestQuestionEntity(userId,contestQuestionEntity);
+        Boolean checkIfExists = userAnswerRepository.existsByUserIdAndContestQuestionEntity(userId,contestQuestionEntity);
+        System.out.println(checkIfExists+" check");
+        if(checkIfExists == false){
+            return null;
+        }
+        UserAnswerEntity userAnswerEntities = userAnswerRepository.getOneByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);
         return userAnswerEntities;
     }
+
+
 
 
 //    @Override
@@ -147,6 +136,13 @@ public class UserAnswerImpl implements UserAnswerService {
             userScore += userAnswerEntity.getPoints();
         }
         return userScore;
+    }
+
+    @Override
+    public String getFastestAnswer(String customQuesionId){
+        String userAnswerId = userAnswerRepository.getFastestTime(customQuesionId);
+        System.out.println(userAnswerId);
+        return userAnswerId;
     }
 
 
