@@ -24,12 +24,6 @@
 /nbdist/
 /.nb-gradle/
 
-<<<<<<< HEAD
-/target/*
-/src/main/resource/apllication.properties
-=======
-
 ### Project files ####
 /target/*
-/src/main/resource/apllication.properties
->>>>>>> cc28c3ee84461a0dd88e8d2fc0959565dc831ed9
+/src/main/resource/application.properties
