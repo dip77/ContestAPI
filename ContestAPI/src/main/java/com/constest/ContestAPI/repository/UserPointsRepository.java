@@ -14,6 +14,7 @@ public interface UserPointsRepository extends CrudRepository<UserPointsEntity,St
 
     List<UserPointsEntity> findAllByUserId(String userId);
     List<UserPointsEntity> findAllByContestEntity(ContestEntity contestEntity);
+    List<UserPointsEntity> getByContestId(String contestId);
 
     @Query(value = "SELECT * FROM user_points p where p.contest_id = ?#{[0]} order by final_points desc",nativeQuery = true)
     List<UserPointsEntity> test(String contest_id);

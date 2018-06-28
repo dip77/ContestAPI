@@ -11,4 +11,5 @@ public interface UserPointsService {
     List<UserPointsDTO> getAllContests();
     List<LeaderBoard> getContestWiseLeaderBoard(String contestId);
     List<LeaderBoard> getOverAllLeaderBoard();
+    int getByContestId(String contestId);
 }

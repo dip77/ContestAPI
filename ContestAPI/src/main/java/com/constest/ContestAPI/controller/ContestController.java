@@ -43,6 +43,8 @@ public class ContestController {
 
     @Autowired
     private UserPointsService userPointsService;
+
+    private int bonus = 5;
     @RequestMapping(method = RequestMethod.POST, value = "/createContest")
     public Boolean saveContest(@RequestBody ContestDTO contestDTO) {
         ContestEntity contestEntity = new ContestEntity();
@@ -165,7 +167,7 @@ public class ContestController {
         UserPointsDTO userPointsDTO = new UserPointsDTO();
         //this function will call API of Question microservice
 
-        int count = 0,points=0,easyCorrectlyAnswered = 0,mediumCorrectlyAnswered=0,hardCorrectlyAnswered=0;
+        int count = 0,points=0,easyCorrectlyAnswered = 0,mediumCorrectlyAnswered=0,hardCorrectlyAnswered=0,flag=0;
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
@@ -187,6 +189,7 @@ public class ContestController {
                         hardCorrectlyAnswered++;
                         break;
                      default:
+                            flag=1;
                             break;
                 }
                 points += userAnswerEntity.getPoints();
@@ -198,9 +201,17 @@ public class ContestController {
         userPointsDTO.setEasyCorrectlyAnswered(easyCorrectlyAnswered);
         userPointsDTO.setHardCorrectlyAnswered(hardCorrectlyAnswered);
         userPointsDTO.setMediumCorrectlyAnswered(mediumCorrectlyAnswered);
-        userPointsDTO.setFinalPoints(points);
         userPointsDTO.setUserId(userId);
         userPointsDTO.setContestDTO(contestDTO);
+        if(flag==0)
+        {
+            userPointsDTO.setBonus(bonus);
+        }
+        else
+        {
+            userPointsDTO.setBonus(0);
+        }
+        userPointsDTO.setFinalPoints(points+userPointsDTO.getBonus());
         userPointsService.save(userPointsDTO);
         return true;
     }
