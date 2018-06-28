@@ -1,7 +1,6 @@
-package com.constest.ContestAPI.service.impl;
+package  com.constest.ContestAPI.service.impl;
 
 import com.constest.ContestAPI.dto.ContestQuestionDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,19 +16,48 @@ public class FCMService {
     final private String googleCloudApiKey = "key=AAAAZ_dnfLI:APA91bE-nImowIYkuqgL34ByAJxIw_yBOIOooxqemWHK4pZuEwT8Tmoomv6KyNu3SJYso9SQnJ1RfHhLpv_fgTbRc9Vnw-65jYCYPmv2BkbXwiluuoxrDh9TUTo3ZWSnoAzruVEPbAmGE94UJKigt4v5FauH9X4ojw";
     final private String googleCloudApiUrl = "https://fcm.googleapis.com/fcm/send/";
     private String payload = "";
-    ObjectMapper objectMapper = new ObjectMapper();
+    //ObjectMapper objectMapper = new ObjectMapper();
 
+/*
+    public static void main(String[] args) {
+        //FCMServices fcmServices = new FCMServices();
+
+
+
+
+
+        System.out.println("Hello World!!");
+    }
+    */
 
     public String postQuestionToUsers(String contestId, ContestQuestionDTO contestQuestionDTO) {
-        String data;
+        String data= "";
+        /*
         try {
-             data = objectMapper.writeValueAsString(contestQuestionDTO);
-        } catch (Exception e) {
+            data = objectMapper.writeValueAsString(contestQuestionDTO);
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return null;
         }
+        */
 
-        payload = "{ \"data\":" + data + ",\"to\" : \"/topics/" + contestId + "_user\"}";
+        //payload = "{ \"data\":" + data + ",\"to\" : \"/topics/" + contestId + "_user\"}";
+        payload = "{ \"data\":{"
+                + "\"questionId\" : \"" + contestQuestionDTO.getQuestionId() + "\" "
+                + "\"contestQuestionId\" : \"" + contestQuestionDTO.getContestQuestionId() + "\" "
+                + "\"categoryId\" : \"" + contestQuestionDTO.getQuestionDTO().getCategoryId() + "\" "
+                + "\"difficulty\" : \"" + contestQuestionDTO.getQuestionDTO().getDifficulty() + "\" "
+                + "\"questionType\" : \"" + contestQuestionDTO.getQuestionDTO().getQuestionText() + "\" "
+                + "\"questionText\" : \"" + contestQuestionDTO.getQuestionDTO().getQuestionText() + "\" "
+                + "\"questionUrl\" : \"" + contestQuestionDTO.getQuestionDTO().getQuestionUrl() + "\" "
+                + "\"optionOne\" : \"" + contestQuestionDTO.getQuestionDTO().getOptionOne() + "\" "
+                + "\"optionTwo\" : \"" + contestQuestionDTO.getQuestionDTO().getOptionTwo() + "\" "
+                + "\"optionThree\" : \"" + contestQuestionDTO.getQuestionDTO().getOptionThree() + "\" "
+                + "\"optionFour\" : \"" + contestQuestionDTO.getQuestionDTO().getOptionFour() + "\" "
+                + "\"answerType\" : \"" + contestQuestionDTO.getQuestionDTO().getAnswerType() + "\" "
+                + "\"points\" : \"" + contestQuestionDTO.getPoints() + "\" "
+                + "\"questionVisibilityDuration\" : \"" + contestQuestionDTO.getContestDTO().getQuestionVisibilityDuration() + "\" "
+                //+ "\"\" : \"" + + "\" "
+                + "},\"to\" : \"/topics/" + contestId + "_user\"}";
 
 
         try {
@@ -60,10 +88,10 @@ public class FCMService {
         }
     }
 
-    public String postStatusToAdmin(String contestId, String status) {
+    private String postStatusToAdmin(String contestId, String status) {
 
 
-        payload = "{ \"data\":" + status + ",\"to\" : \"/topics/QuizMaster\"}";
+        payload = "{ \"data\": { \"message\" : \"" + status + "\"} ,\"to\" : \"/topics/QuizMaster\"}";
 
 
         try {
@@ -97,7 +125,7 @@ public class FCMService {
     private void postNotificationToAdminNUsers(String contestId) {
 
 
-        payload = "{ \"data\": Dynamic Contest is going to start. Make yourself available in 5 mins,\"to\" : \"/topics/QuizMaster\"}";
+        payload = "{ \"data\": { \"message\" : \"Dynamic Contest is going to start. Make yourself available in 5 mins\" },\"to\" : \"/topics/QuizMaster\"}";
 
 
         try {
@@ -127,7 +155,7 @@ public class FCMService {
             //return "error sending push notification : " + e.getMessage();
         }
 
-        payload = "{ \"data\": Dynamic Contest is going to start. Make yourself available in 5 mins,\"to\" : \"/topics/" + contestId + "_user\"}";
+        payload = "{ \"data\": { \"message\" : \"Dynamic Contest is going to start. Make yourself available in 5 mins\" },\"to\" : \"/topics/" + contestId + "_user\"}";
 
 
         try {
@@ -156,5 +184,8 @@ public class FCMService {
         } catch (Exception e) {
             //return "error sending push notification : " + e.getMessage();
         }
+
+
+
     }
 }

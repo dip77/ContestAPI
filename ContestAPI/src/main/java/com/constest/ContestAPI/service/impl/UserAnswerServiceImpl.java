@@ -36,7 +36,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
 
-        userAnswerEntity.setTimeOfAnswer(dateFormat.format(cal.getTime()));
+        userAnswerEntity.setTimeOfAnswer(String.valueOf(System.currentTimeMillis()));
         System.out.println(userAnswerEntity);
         //todo : phani .. what is the need of try catch bock here?
         userAnswerRepository.save(userAnswerEntity);
