@@ -1,14 +1,12 @@
 package com.constest.ContestAPI.controller;
 
-import com.constest.ContestAPI.dto.ContestDTO;
-import com.constest.ContestAPI.dto.ContestQuestionDTO;
-import com.constest.ContestAPI.dto.QuestionDTO;
-import com.constest.ContestAPI.dto.UserAnswerDTO;
+import com.constest.ContestAPI.dto.*;
 import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import com.constest.ContestAPI.entity.UserAnswerEntity;
 import com.constest.ContestAPI.service.ContestQuestionService;
 import com.constest.ContestAPI.service.UserAnswerService;
+import com.constest.ContestAPI.service.UserPointsService;
 import com.constest.ContestAPI.service.impl.ContestServiceImpl;
 import com.constest.ContestAPI.util.ValidationUtil;
 import org.springframework.beans.BeanUtils;
@@ -43,6 +41,8 @@ public class ContestController {
     @Autowired
     private UserAnswerService userAnswerService;
 
+    @Autowired
+    private UserPointsService userPointsService;
     @RequestMapping(method = RequestMethod.POST, value = "/createContest")
     public Boolean saveContest(@RequestBody ContestDTO contestDTO) {
         ContestEntity contestEntity = new ContestEntity();
@@ -148,6 +148,64 @@ public class ContestController {
         }
         contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
         return contestDTO;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getContestPoints/{contestId}/{userId}")
+    public UserPointsDTO getContestPoints(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
+
+        ContestEntity contestEntity = new ContestEntity();
+        contestEntity.setContestId(contestId);
+        boolean isContestExists = contestQuestionService.isContestExists(contestEntity);
+
+        if (!isContestExists) {
+            return null;
+        }
+
+        contestEntity = contestService.getAllContestQuestions(contestId);
+        ContestDTO contestDTO = new ContestDTO();
+        BeanUtils.copyProperties(contestEntity, contestDTO);
+        List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
+        UserPointsDTO userPointsDTO = new UserPointsDTO();
+        //this function will call API of Question microservice
+
+        int count = 0,points=0,easyCorrectlyAnswered = 0,mediumCorrectlyAnswered=0,hardCorrectlyAnswered=0;
+        for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
+            ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
+            BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
+            System.out.println(contestQuestionDTO.getContestQuestionId());
+            UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
+            UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
+            System.out.println(userAnswerEntity + " user");
+            if (userAnswerEntity != null) {
+                int point = userAnswerEntity.getPoints();
+                switch (point)
+                {
+                    case 1:
+                        easyCorrectlyAnswered++;
+                        break;
+                    case 2:
+                        mediumCorrectlyAnswered++;
+                        break;
+                    case 3:
+                        hardCorrectlyAnswered++;
+                        break;
+                     default:
+                            break;
+                }
+                points += userAnswerEntity.getPoints();
+                 contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
+            }
+            count++;
+        }
+        System.out.println("points"+points);
+        userPointsDTO.setEasyCorrectlyAnswered(easyCorrectlyAnswered);
+        userPointsDTO.setHardCorrectlyAnswered(hardCorrectlyAnswered);
+        userPointsDTO.setMediumCorrectlyAnswered(mediumCorrectlyAnswered);
+        userPointsDTO.setFinalPoints(points);
+        userPointsDTO.setUserId(userId);
+        userPointsDTO.setContestDTO(contestDTO);
+        userPointsService.save(userPointsDTO);
+        return userPointsDTO;
     }
 
 
