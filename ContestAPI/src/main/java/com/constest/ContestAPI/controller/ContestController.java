@@ -43,10 +43,11 @@ public class ContestController {
 
     @Autowired
     private UserPointsService userPointsService;
+
+    private int bonus = 5;
     @RequestMapping(method = RequestMethod.POST, value = "/createContest")
     public Boolean saveContest(@RequestBody ContestDTO contestDTO) {
         ContestEntity contestEntity = new ContestEntity();
-        System.out.println(contestDTO.getStartDate());
         contestEntity.setContestType(contestDTO.getContestType().toLowerCase());
         BeanUtils.copyProperties(contestDTO, contestEntity);
         return contestService.saveContest(contestEntity);
@@ -72,6 +73,7 @@ public class ContestController {
             }
             contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
             contestDTOList.add(contestDTO);
+
         }
         return contestDTOList;
     }
@@ -131,10 +133,8 @@ public class ContestController {
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
-            System.out.println(contestQuestionDTO.getContestQuestionId());
             UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
             UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
-            System.out.println(userAnswerEntity + " user");
             if (userAnswerEntity != null) {
                 BeanUtils.copyProperties(userAnswerEntity, userAnswerDTO);
                 contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
@@ -151,12 +151,11 @@ public class ContestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestPoints/{contestId}/{userId}")
-    public UserPointsDTO getContestPoints(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
+    public Boolean getContestPoints(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
 
         ContestEntity contestEntity = new ContestEntity();
         contestEntity.setContestId(contestId);
         boolean isContestExists = contestQuestionService.isContestExists(contestEntity);
-
         if (!isContestExists) {
             return null;
         }
@@ -168,14 +167,14 @@ public class ContestController {
         UserPointsDTO userPointsDTO = new UserPointsDTO();
         //this function will call API of Question microservice
 
-        int count = 0,points=0,easyCorrectlyAnswered = 0,mediumCorrectlyAnswered=0,hardCorrectlyAnswered=0;
+        int count = 0,points=0,easyCorrectlyAnswered = 0,mediumCorrectlyAnswered=0,hardCorrectlyAnswered=0,flag=0;
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
-            System.out.println(contestQuestionDTO.getContestQuestionId());
+//            System.out.println(contestQuestionDTO.getContestQuestionId());
             UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
             UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
-            System.out.println(userAnswerEntity + " user");
+//            System.out.println(userAnswerEntity + " user");
             if (userAnswerEntity != null) {
                 int point = userAnswerEntity.getPoints();
                 switch (point)
@@ -190,6 +189,7 @@ public class ContestController {
                         hardCorrectlyAnswered++;
                         break;
                      default:
+                            flag=1;
                             break;
                 }
                 points += userAnswerEntity.getPoints();
@@ -198,14 +198,25 @@ public class ContestController {
             count++;
         }
         System.out.println("points"+points);
+        System.out.println(easyCorrectlyAnswered);
+        System.out.println(hardCorrectlyAnswered);
+        System.out.println(mediumCorrectlyAnswered);
         userPointsDTO.setEasyCorrectlyAnswered(easyCorrectlyAnswered);
         userPointsDTO.setHardCorrectlyAnswered(hardCorrectlyAnswered);
         userPointsDTO.setMediumCorrectlyAnswered(mediumCorrectlyAnswered);
-        userPointsDTO.setFinalPoints(points);
         userPointsDTO.setUserId(userId);
         userPointsDTO.setContestDTO(contestDTO);
+        if(flag==0)
+        {
+            userPointsDTO.setBonus(bonus);
+        }
+        else
+        {
+            userPointsDTO.setBonus(0);
+        }
+        userPointsDTO.setFinalPoints(points+userPointsDTO.getBonus());
         userPointsService.save(userPointsDTO);
-        return userPointsDTO;
+        return true;
     }
 
 
@@ -223,19 +234,17 @@ public class ContestController {
     }
 
     public QuestionDTO getQuestion(String questionId) {
-        System.out.println(questionId);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("questionId", questionId);
-        String URL = "http://10.177.2.15:8080/question/getOne/" + questionId;
+        String URL = "http://10.177.1.100:8080/question/getOne/" + questionId;
         HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
         ResponseEntity<QuestionDTO> rs = restTemplate.exchange(URL, HttpMethod.GET,
                 entity, new ParameterizedTypeReference<QuestionDTO>() {
                 });
         if (rs.getStatusCode() == HttpStatus.OK) {
-            System.out.println(restTemplate.getUriTemplateHandler().toString());
             return rs.getBody();
         }
 

@@ -17,7 +17,6 @@ public class  ContestQuestionDTO {
 
     private List<UserAnswerDTO> allUserAnswerEntityList;
 
-
     public List<UserAnswerDTO> getAllUserAnswerEntityList() {
         return allUserAnswerEntityList;
     }

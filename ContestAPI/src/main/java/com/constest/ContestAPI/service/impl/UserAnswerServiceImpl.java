@@ -27,6 +27,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public Boolean save(UserAnswerDTO userAnswerDTO) {
+        System.out.println("save answer()");
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
@@ -48,8 +49,9 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                     userAnswerEntity.setTimeOfAnswer(null);
                 }
             }
-       }
-      //  System.out.println(userAnswerEntity);
+        }
+        //  System.out.println(userAnswerEntity);
+
         userAnswerRepository.save(userAnswerEntity);
         return true;
     }
@@ -74,7 +76,6 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         contestQuestionEntity.setContestQuestionId(contestQuestionId);
         Boolean checkIfExists = userAnswerRepository.existsByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);
         if (checkIfExists == false) {
-
             return null;
         }
         UserAnswerEntity userAnswerEntities = userAnswerRepository.getOneByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);
@@ -88,7 +89,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         String userAnswerId = userAnswerRepository.getFastestTime(contestQuestionId);
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-        System.out.println("\nQuestion Id"+userAnswerEntity.getContestQuestionEntity().getQuestionId()+"\n"+userAnswerEntity.getAnswer().toUpperCase());
+        System.out.println("\nQuestion Id" + userAnswerEntity.getContestQuestionEntity().getQuestionId() + "\n" + userAnswerEntity.getAnswer().toUpperCase());
         String points = checkAnswer(userAnswerEntity.getContestQuestionEntity().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
         userAnswerEntity.setPoints(Integer.parseInt(points));
         userAnswerRepository.save(userAnswerEntity);
@@ -97,6 +98,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public String checkAnswer(String questionId, String answer) {
+        System.out.println(questionId + " - " + answer);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -106,7 +108,6 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                 entity, new ParameterizedTypeReference<String>() {
                 });
         if (rs.getStatusCode() == HttpStatus.OK) {
-            System.out.println(restTemplate.getUriTemplateHandler().toString());
             return (rs.getBody());
         }
 
