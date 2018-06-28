@@ -22,12 +22,7 @@ public class UserAnswerEntity {
     private Integer points;
     private Boolean skipped;
     private String timeOfAnswer;
-<<<<<<< HEAD
-    private Boolean answered;
-=======
     private Boolean answered=false;
->>>>>>> 4c30ae04680371a52743f4ec7963195b6cc789fb
-
     public String getUserAnswerId() {
         return userAnswerId;
     }
