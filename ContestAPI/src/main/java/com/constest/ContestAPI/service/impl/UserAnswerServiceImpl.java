@@ -25,15 +25,21 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public Boolean save(UserAnswerDTO userAnswerDTO) {
+        System.out.println("save answer()");
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
         userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
-
-        System.out.println(userAnswerDTO.getContestQuestionDTO().getQuestionDTO());
         userAnswerEntity.setTimeOfAnswer(String.valueOf(System.currentTimeMillis()));
-        userAnswerEntity.setPoints(Integer.parseInt(checkAnswer(userAnswerDTO.getContestQuestionDTO().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase())));
+        String points = null;
+        if (userAnswerEntity.getAnswer() != null)
+            points = checkAnswer(userAnswerDTO.getContestQuestionDTO().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
+        System.out.println(points+ " points and question id "+userAnswerDTO.getContestQuestionDTO());
+        if (points!=null){
+            userAnswerEntity.setPoints(Integer.parseInt(points));
+
+        }
         System.out.println(userAnswerEntity);
         userAnswerRepository.save(userAnswerEntity);
         return true;
@@ -75,6 +81,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public String checkAnswer(String questionId, String answer) {
+        System.out.println(questionId + " - " + answer);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -84,7 +91,6 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                 entity, new ParameterizedTypeReference<String>() {
                 });
         if (rs.getStatusCode() == HttpStatus.OK) {
-            System.out.println(restTemplate.getUriTemplateHandler().toString());
             return (rs.getBody());
         }
 
