@@ -39,8 +39,8 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public ContestEntity getContestByAdmin(String adminId) {
-      return   contestRepository.findByAdminId(adminId);
+    public List<ContestEntity> getContestByAdmin(String adminId) {
+      return   contestRepository.findAllByAdminId(adminId);
     }
 
     @Override

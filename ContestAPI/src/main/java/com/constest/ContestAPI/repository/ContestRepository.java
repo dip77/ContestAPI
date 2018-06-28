@@ -11,7 +11,7 @@ public interface ContestRepository extends CrudRepository<ContestEntity,String> 
 
     List<ContestEntity> findByCategoryId(String categoryId);
     List<ContestEntity> findByContestType(String contestType);
-    ContestEntity findByAdminId(String adminId);
+    List<ContestEntity> findAllByAdminId(String adminId);
 
 
 }
