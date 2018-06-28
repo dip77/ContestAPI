@@ -106,7 +106,7 @@ public class ContestController {
         }
 
         contestEntity = contestService.getAllContestQuestions(contestId);
-       ContestDTO contestDTO = new ContestDTO();
+        ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
         List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
         //this function will call API of Question microservice

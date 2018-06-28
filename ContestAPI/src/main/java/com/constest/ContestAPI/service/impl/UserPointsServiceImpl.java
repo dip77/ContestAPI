@@ -49,6 +49,12 @@ public class UserPointsServiceImpl implements UserPointsService {
     }
 
     @Override
+    public int getByContestId(String contestId) {
+       List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestId(contestId);
+       return userPointsEntityList.size();
+    }
+
+    @Override
     public List<LeaderBoard> getOverAllLeaderBoard() {
         List<Object[]> objects = userPointsRepositoryInterface.overAllBoard();
         List<LeaderBoard> leaderBoards = new ArrayList<>();
