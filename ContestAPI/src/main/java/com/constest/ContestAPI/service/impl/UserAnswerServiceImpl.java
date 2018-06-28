@@ -25,22 +25,20 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public Boolean save(UserAnswerDTO userAnswerDTO) {
-        System.out.println("save answer()");
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
         userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
+
         userAnswerEntity.setTimeOfAnswer(String.valueOf(System.currentTimeMillis()));
         String points = null;
         if (userAnswerEntity.getAnswer() != null)
             points = checkAnswer(userAnswerDTO.getContestQuestionDTO().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
-        System.out.println(points+ " points and question id "+userAnswerDTO.getContestQuestionDTO());
         if (points!=null){
             userAnswerEntity.setPoints(Integer.parseInt(points));
 
         }
-        System.out.println(userAnswerEntity);
         userAnswerRepository.save(userAnswerEntity);
         return true;
     }

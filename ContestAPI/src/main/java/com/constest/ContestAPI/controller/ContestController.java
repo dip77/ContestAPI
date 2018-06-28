@@ -150,7 +150,7 @@ public class ContestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestPoints/{contestId}/{userId}")
     public Boolean getContestPoints(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
-
+        System.out.println("get points()");
         ContestEntity contestEntity = new ContestEntity();
         contestEntity.setContestId(contestId);
         boolean isContestExists = contestQuestionService.isContestExists(contestEntity);
@@ -169,10 +169,10 @@ public class ContestController {
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
-//            System.out.println(contestQuestionDTO.getContestQuestionId());
             UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
+            System.out.println("userId"+userId);
+            System.out.println("contest question entity"+contestQuestionEntity);
             UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
-//            System.out.println(userAnswerEntity + " user");
             if (userAnswerEntity != null) {
                 int point = userAnswerEntity.getPoints();
                 switch (point)
@@ -195,9 +195,6 @@ public class ContestController {
             count++;
         }
         System.out.println("points"+points);
-        System.out.println(easyCorrectlyAnswered);
-        System.out.println(hardCorrectlyAnswered);
-        System.out.println(mediumCorrectlyAnswered);
         userPointsDTO.setEasyCorrectlyAnswered(easyCorrectlyAnswered);
         userPointsDTO.setHardCorrectlyAnswered(hardCorrectlyAnswered);
         userPointsDTO.setMediumCorrectlyAnswered(mediumCorrectlyAnswered);

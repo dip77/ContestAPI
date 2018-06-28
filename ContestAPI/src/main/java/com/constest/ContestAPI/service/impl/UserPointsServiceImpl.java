@@ -59,6 +59,7 @@ public class UserPointsServiceImpl implements UserPointsService {
             LeaderBoard leaderBoard = new LeaderBoard();
             leaderBoard.setUserId((String)objects2[0]);
             leaderBoard.setFinalPoints((BigInteger)objects2[1]);
+            System.out.println(leaderBoard.getFinalPoints());
             leaderBoard.setRank((BigInteger)objects2[2]);
             leaderBoards.add(leaderBoard);
             index++;
