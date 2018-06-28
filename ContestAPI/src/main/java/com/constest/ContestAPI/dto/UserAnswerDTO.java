@@ -1,8 +1,5 @@
 package com.constest.ContestAPI.dto;
 
-import com.constest.ContestAPI.entity.ContestQuestionEntity;
-
-import java.sql.Timestamp;
 
 public class UserAnswerDTO {
     private String userAnswerId;

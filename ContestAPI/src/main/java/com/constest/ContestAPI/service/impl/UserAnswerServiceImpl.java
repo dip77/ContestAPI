@@ -1,5 +1,6 @@
 package com.constest.ContestAPI.service.impl;
 
+import com.constest.ContestAPI.dto.QuestionDTO;
 import com.constest.ContestAPI.dto.UserAnswerDTO;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import com.constest.ContestAPI.entity.UserAnswerEntity;
@@ -7,18 +8,16 @@ import com.constest.ContestAPI.repository.UserAnswerRepository;
 import com.constest.ContestAPI.service.UserAnswerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 
-//todo : phani : change the name of the class to UserAnswerServiceImpl
 public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Autowired
@@ -26,19 +25,15 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public Boolean save(UserAnswerDTO userAnswerDTO) {
-        //todo : phani : need to set the answer time on the backend, not take data from android app
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
         userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-
-        userAnswerEntity.setTimeOfAnswer(dateFormat.format(cal.getTime()));
+        System.out.println(userAnswerDTO.getContestQuestionDTO().getQuestionDTO());
+        userAnswerEntity.setTimeOfAnswer(String.valueOf(System.currentTimeMillis()));
+        userAnswerEntity.setPoints(Integer.parseInt(checkAnswer(userAnswerDTO.getContestQuestionDTO().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase())));
         System.out.println(userAnswerEntity);
-        //todo : phani .. what is the need of try catch bock here?
         userAnswerRepository.save(userAnswerEntity);
         return true;
     }
@@ -50,55 +45,11 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         return userAnswerEntity;
     }
 
-    //todo : remove this method
-//    @Override
-//    public String getAnswer(String userAnswerId) {
-//        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-//        String answer = userAnswerEntity.getAnswer();
-//        return answer;
-//    }
-
-    //    //todo : phani : remove this, this needs to be done by save method itself
-//    @Override
-//    public Boolean setAnswer(String userAnswerId, String answer) {
-//        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-//        userAnswerEntity.setAnswer(answer);
-//        return true;
-//    }
-//
     @Override
     public List<UserAnswerEntity> getUserAllAnswers(String userId) {
         List<UserAnswerEntity> userAnswerEntities = (List<UserAnswerEntity>) userAnswerRepository.findAllByUserId(userId);
         return userAnswerEntities;
     }
-
-//    @Override
-//    public Timestamp getAnswerTime(String userAnswerId) {
-//        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-//        Timestamp timestamp = userAnswerEntity.getTimeOfAnswer();
-//        return timestamp;
-//    }
-//
-//    @Override
-//    public Boolean setAnswerTime(String userAnswerId, Timestamp timestamp) {
-//        UserAnswerEntity userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-//        userAnswerEntity.setTimeOfAnswer(timestamp);
-//        return true;
-//    }
-
-//    @Override
-//    public Boolean getIfSkipped(String contestQuestionId, String userId) {
-//        List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.findAllByContestQuestionIdAndUserId(contestQuestionId, userId);
-//        Boolean isSkipped = true;
-//        for (UserAnswerEntity userAnswerEntity : userAnswerEntities) {
-//            isSkipped &= userAnswerEntity.getSkipped();
-//        }
-//        return isSkipped;
-//    }
-
-
-    //remove user
-
 
     @Override
     public UserAnswerEntity getUserEntity(String userId, String contestQuestionId) {
@@ -107,40 +58,16 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         contestQuestionEntity.setContestQuestionId(contestQuestionId);
         Boolean checkIfExists = userAnswerRepository.existsByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);
         if (checkIfExists == false) {
+<<<<<<< HEAD
+
+=======
+>>>>>>> 4c30ae04680371a52743f4ec7963195b6cc789fb
             return null;
         }
         UserAnswerEntity userAnswerEntities = userAnswerRepository.getOneByUserIdAndContestQuestionEntity(userId, contestQuestionEntity);
         return userAnswerEntities;
     }
 
-
-//    @Override
-//    public int getUserContestPoints(String contestId, String userId) {
-//        ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
-//        // contestEntity.setContestId(contestId);
-//        UserPointsEntity userPointsEntity = new UserPointsEntity();
-//        userPointsEntity.s(contestId);
-//        contestQuestionEntity.setContestEntity(contestEntity);
-//
-//        List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.findAllByUserPointsEntityAndUserId(contestQuestionEntity, userId);
-//        int userContestScore = 0;
-//        for (UserAnswerEntity userAnswerEntity : userAnswerEntities) {
-//            userContestScore += userAnswerEntity.getPoints();
-//        }
-//        return userContestScore;
-//
-//    }
-
-
-//    @Override
-//    public int getUserScore(String userId) {
-//        List<UserAnswerEntity> userAnswerEntities = userAnswerRepository.findAllByUserId(userId);
-//        int userScore = 0;
-//        for (UserAnswerEntity userAnswerEntity : userAnswerEntities) {
-//            userScore += userAnswerEntity.getPoints();
-//        }
-//        return userScore;
-//    }
 
     @Override
     public String getFastestAnswer(String customQuesionId) {
@@ -149,6 +76,23 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         return userAnswerId;
     }
 
+    @Override
+    public String checkAnswer(String questionId, String answer) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        String URL = "http://10.177.1.100:8080/question/checkAnswer/" + questionId + "/" + answer;
+        HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
+        ResponseEntity<String> rs = restTemplate.exchange(URL, HttpMethod.GET,
+                entity, new ParameterizedTypeReference<String>() {
+                });
+        if (rs.getStatusCode() == HttpStatus.OK) {
+            System.out.println(restTemplate.getUriTemplateHandler().toString());
+            return (rs.getBody());
+        }
 
-//easy medium hard score
+        return null;
+
+    }
+
 }

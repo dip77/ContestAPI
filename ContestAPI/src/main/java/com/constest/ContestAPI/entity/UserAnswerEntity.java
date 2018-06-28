@@ -1,11 +1,9 @@
 package com.constest.ContestAPI.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = UserAnswerEntity.TABLE_NAME)
@@ -24,7 +22,11 @@ public class UserAnswerEntity {
     private Integer points;
     private Boolean skipped;
     private String timeOfAnswer;
+<<<<<<< HEAD
+    private Boolean answered;
+=======
     private Boolean answered=false;
+>>>>>>> 4c30ae04680371a52743f4ec7963195b6cc789fb
 
     public String getUserAnswerId() {
         return userAnswerId;
@@ -39,9 +41,6 @@ public class UserAnswerEntity {
     @JoinColumn(name = "contest_question_id")
     ContestQuestionEntity contestQuestionEntity;
 
-    //  @ManyToOne
-    //  @JoinColumn(name="userContestId",nullable = false)
-    //  UserPointsEntity userPointsEntity;
 
 
     public Boolean getSkipped() {
@@ -80,10 +79,6 @@ public class UserAnswerEntity {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public String getTimeOfAnswer() {
