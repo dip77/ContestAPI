@@ -27,6 +27,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public Boolean save(UserAnswerDTO userAnswerDTO) {
+        System.out.println("save called "+userAnswerDTO);
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
@@ -50,7 +51,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
             if (userAnswerEntity.getContestQuestionEntity().getContestEntity().getContestType().equalsIgnoreCase("static")) {
                 userAnswerEntity.setPoints(Integer.parseInt(points));
             } else {
-                if (points.equals("0")) {
+                if (points!=null && points.equals("0")) {
                     userAnswerEntity.setTimeOfAnswer(null);
                 }
             }

@@ -65,8 +65,15 @@ public class UserPointsServiceImpl implements UserPointsService {
             LeaderBoard leaderBoard = new LeaderBoard();
             leaderBoard.setUserId((String)objects2[0]);
 //            leaderBoard.setFinalPoints((BigInteger)objects2[1]);
-            leaderBoard.setFinalPoints(BigInteger.valueOf((int)objects2[1]));
+            if(objects2[1] instanceof  String)
+                System.out.println("string");
+            else if(objects2[1] instanceof BigInteger)
+                System.out.println("Big");
+            else
+                System.out.println("none");
+            leaderBoard.setFinalPoints((BigInteger)objects2[1]);
           //  leaderBoard.setPointInt((Integer)objects2[1]);
+            leaderBoard.setFinalPointsString(((BigInteger)objects2[1]).toString());
             System.out.println(leaderBoard.getFinalPoints());
             leaderBoard.setRank((BigInteger)objects2[2]);
             leaderBoards.add(leaderBoard);

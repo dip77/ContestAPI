@@ -7,6 +7,15 @@ public class LeaderBoard {
     private BigInteger finalPoints;
     private BigInteger rank;
     private Integer pointInt;
+    private String finalPointsString;
+
+    public String getFinalPointsString() {
+        return finalPointsString;
+    }
+
+    public void setFinalPointsString(String finalPointsString) {
+        this.finalPointsString = finalPointsString;
+    }
 
     public Integer getPointInt() {
         return pointInt;
