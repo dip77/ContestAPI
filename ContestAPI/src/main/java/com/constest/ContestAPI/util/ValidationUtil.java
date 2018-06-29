@@ -7,6 +7,7 @@ import java.util.Date;
 public class ValidationUtil {
     public static boolean compare(String date1) {
         try {
+
             SimpleDateFormat dateFormat = new SimpleDateFormat(
                     "MMM dd, yyyy hh:mm:ss aa");
             Date parsedTimeStamp = dateFormat.parse(date1);
@@ -14,8 +15,9 @@ public class ValidationUtil {
             return timestamp.after(new Timestamp(System.currentTimeMillis()));
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+
+
+            return true;
         }
 
 

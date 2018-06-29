@@ -18,6 +18,7 @@ public class UserAnswerController {
 
     @RequestMapping(method = RequestMethod.POST, value = "saveAnswer")
     public Boolean userAnswer(@RequestBody UserAnswerDTO userAnswerDTO) {
+        System.out.println("save answer "+userAnswerDTO);
         Boolean userAnswerDTO1 = userAnswerService.save(userAnswerDTO);
         return userAnswerDTO1;
     }

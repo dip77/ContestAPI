@@ -27,13 +27,15 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public Boolean save(UserAnswerDTO userAnswerDTO) {
-        System.out.println("save answer()");
+        System.out.println("save called "+userAnswerDTO);
         UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
         BeanUtils.copyProperties(userAnswerDTO, userAnswerEntity);
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
         userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
+        userAnswerEntity.setTimeOfAnswer(String.valueOf(System.currentTimeMillis()));
         ContestEntity contestEntity = new ContestEntity();
+        System.out.println(userAnswerDTO);
         contestEntity.setContestId(userAnswerDTO.getContestQuestionDTO().getContestDTO().getContestId());
         contestEntity.setContestType(userAnswerDTO.getContestQuestionDTO().getContestDTO().getContestType());
         userAnswerEntity.getContestQuestionEntity().setContestEntity(contestEntity);
@@ -43,10 +45,14 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         if (userAnswerEntity.getAnswer() != null) {
             System.out.println("Inside getAnswer");
             points = checkAnswer(userAnswerDTO.getContestQuestionDTO().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
+        if (points!=null){
+            userAnswerEntity.setPoints(Integer.parseInt(points));
+
+        }
             if (userAnswerEntity.getContestQuestionEntity().getContestEntity().getContestType().equalsIgnoreCase("static")) {
                 userAnswerEntity.setPoints(Integer.parseInt(points));
             } else {
-                if (points.equals("0")) {
+                if (points!=null && points.equals("0")) {
                     userAnswerEntity.setTimeOfAnswer(null);
                 }
             }

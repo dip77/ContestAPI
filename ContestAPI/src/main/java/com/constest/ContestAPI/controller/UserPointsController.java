@@ -3,6 +3,7 @@ import com.constest.ContestAPI.dto.QuestionDTO;
 import com.constest.ContestAPI.dto.ReportDTO;
 import com.constest.ContestAPI.dto.UserPointsDTO;
 import com.constest.ContestAPI.entity.LeaderBoard;
+import com.constest.ContestAPI.entity.OverAllLeaderBoard;
 import com.constest.ContestAPI.service.UserPointsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -48,6 +49,7 @@ public class UserPointsController {
         return userPointsServiceInterface.getContestWiseLeaderBoard(contestId);
     }
 
+<<<<<<< HEAD
 //    @RequestMapping(method = RequestMethod.POST,value = "/getReport/contestWise")
 //    public List<ReportDTO> getReport(@RequestBody List<String> contestIdList)
 //    {
@@ -61,6 +63,24 @@ public class UserPointsController {
 //        }
 //        return reportDTOList;
 //    }
+=======
+    @RequestMapping(method = RequestMethod.POST,value = "/getReport/contestWise")
+    public List<ReportDTO> getReport(@RequestBody List<String> contestIdList)
+    {
+        List<ReportDTO> reportDTOList = new ArrayList<>();
+        for (String contestId:contestIdList) {
+            Integer contestWiseUsers = userPointsServiceInterface.getByContestId(contestId);
+            ReportDTO reportDTO = new ReportDTO();
+            reportDTO.setContestId(contestId);
+            reportDTO.setNumberOfUsers(contestWiseUsers);
+            reportDTOList.add(reportDTO);
+            System.out.println(reportDTO);
+        }
+        System.out.println(reportDTOList.size());
+        return reportDTOList;
+
+    }
+>>>>>>> dc2aa83befd38dfed0f8006acba8577b8cf32c35
 
     @RequestMapping(method = RequestMethod.GET,value = "/getReport/overAllUsers")
     public Integer getUsers()
@@ -73,7 +93,7 @@ public class UserPointsController {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        String URL = "http://10.177.2.15:8080/question/getOne/";
+        String URL = "http://10.177.2.201:8082/question/getOne/";
         HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
         ResponseEntity<Integer> rs = restTemplate.exchange(URL, HttpMethod.GET,
                 entity, new ParameterizedTypeReference<Integer>() {

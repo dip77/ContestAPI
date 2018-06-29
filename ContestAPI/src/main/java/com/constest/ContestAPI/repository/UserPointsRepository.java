@@ -12,6 +12,8 @@ import java.util.List;
 public interface UserPointsRepository extends CrudRepository<UserPointsEntity,String> {
 
     List<UserPointsEntity> findAllByUserId(String userId);
+    List<UserPointsEntity> getByContestEntity(ContestEntity contestEntity);
+    //List<UserPointsEntity> getByContestC(String contestId);
     List<UserPointsEntity> findAllByContestEntity(ContestEntity contestEntity);
     //List<UserPointsEntity> getByContestId(String contestId);
 

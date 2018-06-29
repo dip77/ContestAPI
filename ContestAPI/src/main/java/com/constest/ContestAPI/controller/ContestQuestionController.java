@@ -41,11 +41,18 @@ public class ContestQuestionController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/addQuestions")
-    public Boolean saveQuestion(@RequestBody List<ContestQuestionDTO> contestQuestionDTOList) {
-        List<ContestQuestionEntity> contestQuestionEntityList = new ArrayList<ContestQuestionEntity>();
+    public Boolean saveQuestions(@RequestBody List<ContestQuestionDTO> contestQuestionDTOList) {
+        System.out.println("add questions");
+         List<ContestQuestionEntity> contestQuestionEntityList = new ArrayList<ContestQuestionEntity>();
         for (ContestQuestionDTO contestQuestionDTO : contestQuestionDTOList) {
+            System.out.println(contestQuestionDTO.getQuestionId()+" question id");
             ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
             BeanUtils.copyProperties(contestQuestionDTO, contestQuestionEntity);
+            ContestEntity contestEntity=new ContestEntity();
+            System.out.println(contestQuestionDTO.getContestDTO().getContestId());
+            contestEntity.setContestId(contestQuestionDTO.getContestDTO().getContestId());
+            contestQuestionEntity.setContestEntity(contestEntity);
+
             contestQuestionEntityList.add(contestQuestionEntity);
         }
         return contestQuestionService.saveQuestions(contestQuestionEntityList);
@@ -53,6 +60,8 @@ public class ContestQuestionController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/pushQuestion/{contestQuestionId}")
     public Boolean pushQuestion(@PathVariable("contestQuestionId") String contestQuestionId) throws InterruptedException {
+
+        System.out.println("push dynamic");
         ContestQuestionEntity contestQuestionEntity = contestQuestionService.getContestQuestionById(contestQuestionId);
         QuestionDTO questionDTO = this.getQuestion(contestQuestionEntity.getQuestionId());
         FCMService fcmService = new FCMService();
