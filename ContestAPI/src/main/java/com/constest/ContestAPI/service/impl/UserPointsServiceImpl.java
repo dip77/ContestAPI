@@ -3,13 +3,18 @@ import com.constest.ContestAPI.dto.ContestDTO;
 import com.constest.ContestAPI.dto.UserPointsDTO;
 import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.LeaderBoard;
+import com.constest.ContestAPI.entity.OverAllLeaderBoard;
 import com.constest.ContestAPI.entity.UserPointsEntity;
 import com.constest.ContestAPI.repository.UserPointsRepository;
 import com.constest.ContestAPI.service.UserPointsService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -50,23 +55,39 @@ public class UserPointsServiceImpl implements UserPointsService {
 
     @Override
     public int getByContestId(String contestId) {
-       List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestId(contestId);
-       return userPointsEntityList.size();
+        ContestEntity contestEntity = new ContestEntity();
+        contestEntity.setContestId(contestId);
+        List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestEntity(contestEntity);
+        return userPointsEntityList.size();
     }
 
     @Override
     public List<LeaderBoard> getOverAllLeaderBoard() {
         List<Object[]> objects = userPointsRepositoryInterface.overAllBoard();
         List<LeaderBoard> leaderBoards = new ArrayList<>();
+        List<OverAllLeaderBoard> overAllLeaderBoards = new ArrayList<>();
         int index = 0;
         for(Object objects1:objects)
         {
             Object[] objects2 = objects.get(index);
+            //OverAllLeaderBoard overAllLeaderBoard = new OverAllLeaderBoard();
             LeaderBoard leaderBoard = new LeaderBoard();
-            leaderBoard.setUserId((String)objects2[0]);
+            String userId = (String) objects2[0];
+            //String finalPoints = (String) objects2[1];
+//            overAllLeaderBoard.setUserId(getUserName(userId));
+//            overAllLeaderBoard.setRank((BigInteger)objects2[2]);
+//            overAllLeaderBoards.add(overAllLeaderBoard);
+//            Object bigIntegers = objects2[1];
+
+
+
+
+           leaderBoard.setUserId(getUserName(userId));
+
             leaderBoard.setFinalPoints((BigInteger)objects2[1]);
             leaderBoard.setRank((BigInteger)objects2[2]);
             leaderBoards.add(leaderBoard);
+            System.out.println(leaderBoard);
             index++;
         }
         return leaderBoards;
@@ -81,13 +102,30 @@ public class UserPointsServiceImpl implements UserPointsService {
        {
            Object[] objects2 = objects.get(index);
            LeaderBoard leaderBoard = new LeaderBoard();
-           leaderBoard.setUserId((String)objects2[0]);
-           leaderBoard.setFinalPoints(BigInteger.valueOf((int)objects2[1]));
+           String userId = (String) objects2[0];
+           leaderBoard.setUserId(getUserName(userId));
+           //leaderBoard.setFinalPoints(BigInteger.valueOf((int)objects2[1]));
            leaderBoard.setRank((BigInteger)objects2[2]);
            leaderBoards.add(leaderBoard);
            index++;
        }
        return leaderBoards;
+    }
+
+    public String getUserName(String userId) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        String URL = "http://10.177.2.200:8082/user/getUserName/"+userId;
+        HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
+        ResponseEntity<String> rs = restTemplate.exchange(URL, HttpMethod.GET,
+                entity, new ParameterizedTypeReference<String>() {
+                });
+        if (rs.getStatusCode() == HttpStatus.OK) {
+            System.out.println(restTemplate.getUriTemplateHandler().toString());
+            return rs.getBody();
+        }
+        return null;
     }
 }
 

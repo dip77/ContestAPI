@@ -58,6 +58,8 @@ public class ContestQuestionController {
         contestQuestionDTO.setQuestionDTO(questionDTO);
         String msg = fcmService.postQuestionToUsers(contestQuestionEntity.getContestEntity().getContestId(), contestQuestionDTO);
         System.out.println(msg);
+
+
         return true;
 
 

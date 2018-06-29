@@ -153,7 +153,7 @@ public class ContestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestPoints/{contestId}/{userId}")
-    public UserPointsDTO getContestPoints(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
+    public Boolean getContestPoints(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
 
         ContestEntity contestEntity = new ContestEntity();
         contestEntity.setContestId(contestId);
@@ -216,7 +216,7 @@ public class ContestController {
         }
         userPointsDTO.setFinalPoints(points+userPointsDTO.getBonus());
         userPointsService.save(userPointsDTO);
-        return userPointsDTO;
+        return true;
     }
 
 
