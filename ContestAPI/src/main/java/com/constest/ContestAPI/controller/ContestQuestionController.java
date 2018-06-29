@@ -66,13 +66,7 @@ public class ContestQuestionController {
         BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
         contestQuestionDTO.setQuestionDTO(questionDTO);
         String msg = fcmService.postQuestionToUsers(contestQuestionEntity.getContestEntity().getContestId(), contestQuestionDTO);
-<<<<<<< HEAD
-        System.out.println(msg);
-
-
-=======
         System.out.println(msg+" msg");
->>>>>>> c7ce109cbfc69f6aeefab478df6eb4e15e55a127
         return true;
 
 

@@ -74,8 +74,8 @@ public class UserPointsServiceImpl implements UserPointsService {
             String userId = (String) objects2[0];
            leaderBoard.setUserId(getUserName(userId));
 
-            leaderBoard.setUserId((String)objects2[0]);
-//            leaderBoard.setFinalPoints((BigInteger)objects2[1]);
+
+//      leaderBoard.setFinalPoints((BigInteger)objects2[1]);
             if(objects2[1] instanceof  String)
                 System.out.println("string");
             else if(objects2[1] instanceof BigInteger)
@@ -105,7 +105,7 @@ public class UserPointsServiceImpl implements UserPointsService {
            LeaderBoard leaderBoard = new LeaderBoard();
            String userId = (String) objects2[0];
            leaderBoard.setUserId(getUserName(userId));
-           //leaderBoard.setFinalPoints(BigInteger.valueOf((int)objects2[1]));
+           leaderBoard.setFinalPoints(BigInteger.valueOf((int)objects2[1]));
            leaderBoard.setRank((BigInteger)objects2[2]);
            leaderBoards.add(leaderBoard);
            index++;
