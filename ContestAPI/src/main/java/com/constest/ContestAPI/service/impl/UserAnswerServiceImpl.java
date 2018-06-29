@@ -2,6 +2,7 @@ package com.constest.ContestAPI.service.impl;
 
 import com.constest.ContestAPI.dto.QuestionDTO;
 import com.constest.ContestAPI.dto.UserAnswerDTO;
+import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import com.constest.ContestAPI.entity.UserAnswerEntity;
 import com.constest.ContestAPI.repository.UserAnswerRepository;
@@ -13,13 +14,14 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 
 public class UserAnswerServiceImpl implements UserAnswerService {
-
+    Integer points;
     @Autowired
     UserAnswerRepository userAnswerRepository;
 
@@ -31,16 +33,25 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
         contestQuestionEntity.setContestQuestionId(userAnswerDTO.getContestQuestionDTO().getContestQuestionId());
         userAnswerEntity.setContestQuestionEntity(contestQuestionEntity);
-        userAnswerEntity.setTimeOfAnswer(String.valueOf(System.currentTimeMillis()));
+        ContestEntity contestEntity = new ContestEntity();
+        contestEntity.setContestId(userAnswerDTO.getContestQuestionDTO().getContestDTO().getContestId());
+        contestEntity.setContestType(userAnswerDTO.getContestQuestionDTO().getContestDTO().getContestType());
+        userAnswerEntity.getContestQuestionEntity().setContestEntity(contestEntity);
+        String time = String.valueOf((System.currentTimeMillis())).substring(3);
+        userAnswerEntity.setTimeOfAnswer(time);
         String points = null;
-        if (userAnswerEntity.getAnswer() != null)
+        if (userAnswerEntity.getAnswer() != null) {
             points = checkAnswer(userAnswerDTO.getContestQuestionDTO().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
-        System.out.println(points+ " points and question id "+userAnswerDTO.getContestQuestionDTO());
-        if (points!=null){
-            userAnswerEntity.setPoints(Integer.parseInt(points));
-
+            if (userAnswerEntity.getContestQuestionEntity().getContestEntity().getContestType().equalsIgnoreCase("static")) {
+                userAnswerEntity.setPoints(Integer.parseInt(points));
+            } else {
+                if (points.equals("0")) {
+                    userAnswerEntity.setTimeOfAnswer(null);
+                }
+            }
         }
-        System.out.println(userAnswerEntity);
+        //  System.out.println(userAnswerEntity);
+
         userAnswerRepository.save(userAnswerEntity);
         return true;
     }
@@ -73,9 +84,15 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
 
     @Override
-    public String getFastestAnswer(String customQuesionId) {
-        String userAnswerId = userAnswerRepository.getFastestTime(customQuesionId);
-        System.out.println(userAnswerId);
+    public String getFastestAnswer(String contestQuestionId) throws InterruptedException {
+        Thread.sleep(5000);
+        String userAnswerId = userAnswerRepository.getFastestTime(contestQuestionId);
+        UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
+        userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
+        System.out.println("\nQuestion Id" + userAnswerEntity.getContestQuestionEntity().getQuestionId() + "\n" + userAnswerEntity.getAnswer().toUpperCase());
+        String points = checkAnswer(userAnswerEntity.getContestQuestionEntity().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
+        userAnswerEntity.setPoints(Integer.parseInt(points));
+        userAnswerRepository.save(userAnswerEntity);
         return userAnswerId;
     }
 

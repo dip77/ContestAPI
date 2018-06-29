@@ -13,11 +13,11 @@ public interface UserAnswerService {
 
     public List<UserAnswerEntity> getUserAllAnswers(String userId);
 
-    public String getFastestAnswer(String contestQuestionId);
+    public String getFastestAnswer(String contestQuestionId) throws InterruptedException;
 
-    public UserAnswerEntity getUserEntity(String userId,String contestQuestionId);
+    public UserAnswerEntity getUserEntity(String userId, String contestQuestionId);
 
-    public String checkAnswer(String questionId,String answer);
+    public String checkAnswer(String questionId, String answer);
 
 
 }
