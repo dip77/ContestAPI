@@ -6,6 +6,15 @@ public class LeaderBoard {
     private String userId;
     private BigInteger finalPoints;
     private BigInteger rank;
+    private Integer pointInt;
+
+    public Integer getPointInt() {
+        return pointInt;
+    }
+
+    public void setPointInt(Integer pointInt) {
+        this.pointInt = pointInt;
+    }
 
     @Override
     public String toString() {

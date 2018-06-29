@@ -29,8 +29,8 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Boolean saveContest(ContestEntity contestEntity) {
-            return contestRepository.save(contestEntity) != null;
+    public ContestEntity saveContest(ContestEntity contestEntity) {
+            return contestRepository.save(contestEntity);
     }
 
     @Override

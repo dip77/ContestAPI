@@ -83,7 +83,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        String URL = "http://10.177.1.100:8080/question/checkAnswer/" + questionId + "/" + answer;
+        String URL = "http://10.177.2.201:8081/question/checkAnswer/" + questionId + "/" + answer;
         HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
         ResponseEntity<String> rs = restTemplate.exchange(URL, HttpMethod.GET,
                 entity, new ParameterizedTypeReference<String>() {

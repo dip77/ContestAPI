@@ -7,7 +7,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.util.List;
 
 public interface ContestService {
-     Boolean saveContest(ContestEntity contestEntity);
+     ContestEntity saveContest(ContestEntity contestEntity);
      List<ContestEntity> getAll();
      List<ContestEntity> getAllByCategory(String categoryId);
      List<ContestEntity> getAllByContestType(String contestType);

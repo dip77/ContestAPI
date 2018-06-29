@@ -48,11 +48,11 @@ public class UserPointsServiceImpl implements UserPointsService {
         return userPointsDTOList;
     }
 
-    @Override
-    public int getByContestId(String contestId) {
-       List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestId(contestId);
-       return userPointsEntityList.size();
-    }
+//    @Override
+//    public int getByContestId(String contestId) {
+//       List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestId(contestId);
+//       return userPointsEntityList.size();
+//    }
 
     @Override
     public List<LeaderBoard> getOverAllLeaderBoard() {
@@ -64,7 +64,9 @@ public class UserPointsServiceImpl implements UserPointsService {
             Object[] objects2 = objects.get(index);
             LeaderBoard leaderBoard = new LeaderBoard();
             leaderBoard.setUserId((String)objects2[0]);
-            leaderBoard.setFinalPoints((BigInteger)objects2[1]);
+//            leaderBoard.setFinalPoints((BigInteger)objects2[1]);
+            leaderBoard.setFinalPoints(BigInteger.valueOf((int)objects2[1]));
+          //  leaderBoard.setPointInt((Integer)objects2[1]);
             System.out.println(leaderBoard.getFinalPoints());
             leaderBoard.setRank((BigInteger)objects2[2]);
             leaderBoards.add(leaderBoard);
