@@ -1,4 +1,5 @@
 package com.constest.ContestAPI.service.impl;
+
 import com.constest.ContestAPI.dto.ContestDTO;
 import com.constest.ContestAPI.dto.UserPointsDTO;
 import com.constest.ContestAPI.entity.ContestEntity;
@@ -29,7 +30,7 @@ public class UserPointsServiceImpl implements UserPointsService {
         UserPointsEntity userPointsEntity = new UserPointsEntity();
         BeanUtils.copyProperties(userPointsDTO, userPointsEntity);
         ContestEntity contestEntity = new ContestEntity();
-        BeanUtils.copyProperties(userPointsDTO.getContestDTO(),contestEntity);
+        BeanUtils.copyProperties(userPointsDTO.getContestDTO(), contestEntity);
         userPointsEntity.setContestEntity(contestEntity);
         UserPointsEntity userPointsEntity1 = userPointsRepositoryInterface.save(userPointsEntity);
         return true;
@@ -40,13 +41,12 @@ public class UserPointsServiceImpl implements UserPointsService {
         List<UserPointsEntity> userPointsEntityList = (List<UserPointsEntity>) userPointsRepositoryInterface.findAll();
         List<UserPointsDTO> userPointsDTOList = new ArrayList<>();
         System.out.println(userPointsDTOList);
-        for(UserPointsEntity userPointsEntity :userPointsEntityList)
-        {
+        for (UserPointsEntity userPointsEntity : userPointsEntityList) {
             UserPointsDTO userPointsDTO = new UserPointsDTO();
             ContestDTO contestDTO = new ContestDTO();
-            BeanUtils.copyProperties(userPointsEntity,userPointsDTO);
+            BeanUtils.copyProperties(userPointsEntity, userPointsDTO);
             ContestEntity contestEntity = userPointsEntity.getContestEntity();
-            BeanUtils.copyProperties(contestEntity,contestDTO);
+            BeanUtils.copyProperties(contestEntity, contestDTO);
             userPointsDTO.setContestDTO(contestDTO);
             userPointsDTOList.add(userPointsDTO);
         }
@@ -58,10 +58,9 @@ public class UserPointsServiceImpl implements UserPointsService {
     public int getByContestId(String contestId) {
         ContestEntity contestEntity = new ContestEntity();
         contestEntity.setContestId(contestId);
-        List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestEntity(contestEntity);
+        List<UserPointsEntity> userPointsEntityList = userPointsRepositoryInterface.getByContestEntity(contestEntity);
         return userPointsEntityList.size();
     }
-
 
 
     @Override
@@ -69,26 +68,25 @@ public class UserPointsServiceImpl implements UserPointsService {
         List<Object[]> objects = userPointsRepositoryInterface.overAllBoard();
         List<LeaderBoard> leaderBoards = new ArrayList<>();
         int index = 0;
-        for(Object objects1:objects)
-        {
+        for (Object objects1 : objects) {
             Object[] objects2 = objects.get(index);
             LeaderBoard leaderBoard = new LeaderBoard();
             String userId = (String) objects2[0];
-           leaderBoard.setUserId(getUserName(userId));
+            leaderBoard.setUserId(getUserName(userId));
 
 
 //      leaderBoard.setFinalPoints((BigInteger)objects2[1]);
-            if(objects2[1] instanceof  String)
+            if (objects2[1] instanceof String)
                 System.out.println("string");
-            else if(objects2[1] instanceof BigInteger)
+            else if (objects2[1] instanceof BigInteger)
                 System.out.println("Big");
             else
                 System.out.println("none");
-            leaderBoard.setFinalPoints((BigInteger)objects2[1]);
-          //  leaderBoard.setPointInt((Integer)objects2[1]);
-            leaderBoard.setFinalPointsString(((BigInteger)objects2[1]).toString());
+            leaderBoard.setFinalPoints((BigInteger) objects2[1]);
+            //  leaderBoard.setPointInt((Integer)objects2[1]);
+            leaderBoard.setFinalPointsString(((BigInteger) objects2[1]).toString());
             System.out.println(leaderBoard.getFinalPoints());
-            leaderBoard.setRank((BigInteger)objects2[2]);
+            leaderBoard.setRank((BigInteger) objects2[2]);
             leaderBoards.add(leaderBoard);
             System.out.println(leaderBoard);
             index++;
@@ -98,37 +96,42 @@ public class UserPointsServiceImpl implements UserPointsService {
 
     @Override
     public List<LeaderBoard> getContestWiseLeaderBoard(String contestId) {
-       List<Object[]> objects = userPointsRepositoryInterface.getContestWiseLeaderBoard(contestId);
-       List<LeaderBoard> leaderBoards = new ArrayList<>();
-       int index = 0;
-       for(Object objects1:objects)
-       {
-           Object[] objects2 = objects.get(index);
-           LeaderBoard leaderBoard = new LeaderBoard();
-           String userId = (String) objects2[0];
-           leaderBoard.setUserId(getUserName(userId));
-           leaderBoard.setFinalPoints(BigInteger.valueOf((int)objects2[1]));
-           leaderBoard.setRank((BigInteger)objects2[2]);
-           leaderBoards.add(leaderBoard);
-           index++;
-       }
-       return leaderBoards;
+        List<Object[]> objects = userPointsRepositoryInterface.getContestWiseLeaderBoard(contestId);
+        List<LeaderBoard> leaderBoards = new ArrayList<>();
+        int index = 0;
+        for (Object objects1 : objects) {
+            Object[] objects2 = objects.get(index);
+            LeaderBoard leaderBoard = new LeaderBoard();
+            String userId = (String) objects2[0];
+            leaderBoard.setUserId(getUserName(userId));
+            leaderBoard.setFinalPoints(BigInteger.valueOf((int) objects2[1]));
+            leaderBoard.setRank((BigInteger) objects2[2]);
+            leaderBoards.add(leaderBoard);
+            index++;
+        }
+        return leaderBoards;
     }
 
     public String getUserName(String userId) {
+        System.out.println(userId + " user id ");
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        String URL = "http://10.177.2.201:8082/user/getUserName/"+userId;
+        String URL = "http://10.177.2.201:8082/user/getUserName/" + userId;
         HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
-        ResponseEntity<String> rs = restTemplate.exchange(URL, HttpMethod.GET,
-                entity, new ParameterizedTypeReference<String>() {
-                });
-        if (rs.getStatusCode() == HttpStatus.OK) {
-            System.out.println(restTemplate.getUriTemplateHandler().toString());
-            return rs.getBody();
+        try {
+            ResponseEntity<String> rs = restTemplate.exchange(URL, HttpMethod.GET,
+                    entity, new ParameterizedTypeReference<String>() {
+                    });
+            if (rs.getStatusCode() == HttpStatus.OK) {
+                System.out.println(restTemplate.getUriTemplateHandler().toString());
+                return rs.getBody();
+            }
+
+        } catch (Exception e) {
+
         }
-        return null;
+        return userId;
     }
 }
 
