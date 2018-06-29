@@ -178,7 +178,11 @@ public class ContestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestPoints/{contestId}/{userId}")
     public Boolean getContestPoints(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
+<<<<<<< HEAD
+
+=======
         System.out.println("get points()");
+>>>>>>> c7ce109cbfc69f6aeefab478df6eb4e15e55a127
         ContestEntity contestEntity = new ContestEntity();
         contestEntity.setContestId(contestId);
         boolean isContestExists = contestQuestionService.isContestExists(contestEntity);

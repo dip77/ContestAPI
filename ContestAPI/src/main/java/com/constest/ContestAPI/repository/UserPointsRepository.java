@@ -13,8 +13,13 @@ import java.util.List;
 public interface UserPointsRepository extends CrudRepository<UserPointsEntity,String> {
 
     List<UserPointsEntity> findAllByUserId(String userId);
+<<<<<<< HEAD
+    List<UserPointsEntity> getByContestEntity(ContestEntity contestEntity);
+    //List<UserPointsEntity> getByContestC(String contestId);
+=======
     List<UserPointsEntity> findAllByContestEntity(ContestEntity contestEntity);
     //List<UserPointsEntity> getByContestId(String contestId);
+>>>>>>> c7ce109cbfc69f6aeefab478df6eb4e15e55a127
 
     @Query(value = "SELECT * FROM user_points p where p.contest_id = ?#{[0]} order by final_points desc",nativeQuery = true)
     List<UserPointsEntity> test(String contest_id);
