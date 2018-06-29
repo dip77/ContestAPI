@@ -113,7 +113,7 @@ public class ContestController {
         List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
         for (ContestEntity contestEntity : contestEntityList) {
             System.out.println(ValidationUtil.compare(contestEntity.getEndDate())+" check"+contestEntity.getEndDate());
-            if (!ValidationUtil.compare(contestEntity.getEndDate())) {
+            if (ValidationUtil.compare(contestEntity.getStartDate())&&!ValidationUtil.compare(contestEntity.getEndDate())) {
                 continue;
             }
             ContestDTO contestDTO = new ContestDTO();
