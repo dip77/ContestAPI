@@ -14,6 +14,10 @@ public class  ContestQuestionDTO {
     private String contestQuestionId;
     private QuestionDTO questionDTO;
     private UserAnswerDTO userAnswerDTO;
+<<<<<<< HEAD
+=======
+
+>>>>>>> a61146dd863d9766c11a69a95a8b18346b18d393
     private List<UserAnswerDTO> allUserAnswerEntityList;
 
     public List<UserAnswerDTO> getAllUserAnswerEntityList() {

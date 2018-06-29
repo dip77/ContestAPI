@@ -23,7 +23,6 @@ public class UserAnswerEntity {
     private Boolean skipped;
     private String timeOfAnswer;
     private Boolean answered=false;
-
     public String getUserAnswerId() {
         return userAnswerId;
     }
