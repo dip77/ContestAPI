@@ -1,43 +1,16 @@
 package com.constest.ContestAPI.dto;
 
-import com.constest.ContestAPI.entity.ContestQuestionEntity;
-
-import java.sql.Timestamp;
 
 public class UserAnswerDTO {
     private String userAnswerId;
-    private String contestQuestionId;
     private ContestQuestionDTO contestQuestionDTO;
-    private String userContestId;
     private String userId;
     private String answer;
-    private int points;
+    private Integer points;
     private Boolean skipped;
-    private Timestamp timeOfAnswer;
+    private String timeOfAnswer;
+    private Boolean answered;
 
-
-    @Override
-    public String toString() {
-        return "UserAnswerDTO{" +
-                "userAnswerId='" + userAnswerId + '\'' +
-                ", contestQuestionId='" + contestQuestionId + '\'' +
-                ", contestQuestionDTO=" + contestQuestionDTO +
-                ", userContestId='" + userContestId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", answer='" + answer + '\'' +
-                ", points=" + points +
-                ", skipped=" + skipped +
-                ", timeOfAnswer=" + timeOfAnswer +
-                '}';
-    }
-
-    public Boolean getSkipped() {
-        return skipped;
-    }
-
-    public void setSkipped(Boolean skipped) {
-        this.skipped = skipped;
-    }
 
     public ContestQuestionDTO getContestQuestionDTO() {
         return contestQuestionDTO;
@@ -46,6 +19,7 @@ public class UserAnswerDTO {
     public void setContestQuestionDTO(ContestQuestionDTO contestQuestionDTO) {
         this.contestQuestionDTO = contestQuestionDTO;
     }
+
     public String getUserAnswerId() {
         return userAnswerId;
     }
@@ -62,21 +36,6 @@ public class UserAnswerDTO {
         this.userId = userId;
     }
 
-    public String getContestQuestionId() {
-        return contestQuestionId;
-    }
-
-    public void setContestQuestionId(String contestQuestionId) {
-        this.contestQuestionId = contestQuestionId;
-    }
-
-    public String getUserContestId() {
-        return userContestId;
-    }
-
-    public void setUserContestId(String userContestId) {
-        this.userContestId = userContestId;
-    }
 
     public String getAnswer() {
         return answer;
@@ -94,12 +53,45 @@ public class UserAnswerDTO {
         this.points = points;
     }
 
-    public Timestamp getTimeOfAnswer() {
+    public Boolean getSkipped() {
+        return skipped;
+    }
+
+    public void setSkipped(Boolean skipped) {
+        this.skipped = skipped;
+    }
+
+    public String getTimeOfAnswer() {
         return timeOfAnswer;
     }
 
-    public void setTimeOfAnswer(Timestamp timeOfAnswer) {
+    public void setTimeOfAnswer(String timeOfAnswer) {
         this.timeOfAnswer = timeOfAnswer;
     }
 
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Boolean getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(Boolean answered) {
+        this.answered = answered;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAnswerDTO{" +
+                "userAnswerId='" + userAnswerId + '\'' +
+                ", contestQuestionDTO=" + contestQuestionDTO +
+                ", userId='" + userId + '\'' +
+                ", answer='" + answer + '\'' +
+                ", points=" + points +
+                ", skipped=" + skipped +
+                ", timeOfAnswer=" + timeOfAnswer +
+                ", answered=" + answered +
+                '}';
+    }
 }

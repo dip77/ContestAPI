@@ -1,9 +1,11 @@
 package com.constest.ContestAPI.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = ContestQuestionEntity.TABLE_NAME)
@@ -22,11 +24,27 @@ public class ContestQuestionEntity {
     @JoinColumn(name = "contest_id",nullable = false)
     private ContestEntity contestEntity;
 
+
+    @OneToMany
+    @JsonManagedReference
+    @JoinColumn(name = "contest_question_id")
+    private List<UserAnswerEntity> userAnswerEntityList;
+
+
     private String questionId;
     private Integer points;
     private Integer visibleTime;
     private Integer sequence;
     private Boolean visible;
+
+
+    public List<UserAnswerEntity> getUserAnswerEntityList() {
+        return userAnswerEntityList;
+    }
+
+    public void setUserAnswerEntityList(List<UserAnswerEntity> userAnswerEntityList) {
+        this.userAnswerEntityList = userAnswerEntityList;
+    }
 
     @Override
     public String toString() {

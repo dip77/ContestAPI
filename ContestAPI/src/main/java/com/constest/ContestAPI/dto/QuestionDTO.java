@@ -14,6 +14,7 @@ public class QuestionDTO {
     private String answerType;
     private String status;
 
+
     public String getQuestionId() {
         return questionId;
     }

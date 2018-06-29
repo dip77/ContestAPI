@@ -5,7 +5,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Id;
 
 import javax.persistence.*;
-import java.util.List;
 
 
 @Entity
@@ -25,29 +24,22 @@ public class UserPointsEntity {
     private int easyCorrectlyAnswered ;
     private int mediumCorrectlyAnswered ;
     private int hardCorrectlyAnswered ;
-    private int Bonus ;
+    private int bonus ;
     private int rank;
 
+    public int getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
+    }
 
     @OneToOne
     @JoinColumn(name = "contest_id",nullable = false)
     private ContestEntity contestEntity;
 
 
-    @Override
-    public String toString() {
-        return "UserPointsEntity{" +
-                "userContestId='" + userContestId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", finalPoints=" + finalPoints +
-                ", easyCorrectlyAnswered=" + easyCorrectlyAnswered +
-                ", mediumCorrectlyAnswered=" + mediumCorrectlyAnswered +
-                ", hardCorrectlyAnswered=" + hardCorrectlyAnswered +
-                ", Bonus=" + Bonus +
-                ", rank=" + rank +
-                ", contestEntity=" + contestEntity +
-                '}';
-    }
 
     public String getUserContestId() {
         return userContestId;
@@ -97,12 +89,19 @@ public class UserPointsEntity {
         this.hardCorrectlyAnswered = hardCorrectlyAnswered;
     }
 
-    public int getBonus() {
-        return Bonus;
-    }
-
-    public void setBonus(int bonus) {
-        Bonus = bonus;
+    @Override
+    public String toString() {
+        return "UserPointsEntity{" +
+                "userContestId='" + userContestId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", finalPoints=" + finalPoints +
+                ", easyCorrectlyAnswered=" + easyCorrectlyAnswered +
+                ", mediumCorrectlyAnswered=" + mediumCorrectlyAnswered +
+                ", hardCorrectlyAnswered=" + hardCorrectlyAnswered +
+                ", bonus=" + bonus +
+                ", rank=" + rank +
+                ", contestEntity=" + contestEntity +
+                '}';
     }
 
     public int getRank() {
@@ -121,3 +120,5 @@ public class UserPointsEntity {
         this.contestEntity = contestEntity;
     }
 }
+
+

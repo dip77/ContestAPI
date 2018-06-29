@@ -2,7 +2,9 @@ package com.constest.ContestAPI.dto;
 
 import com.constest.ContestAPI.entity.ContestEntity;
 
-public class    ContestQuestionDTO {
+import java.util.List;
+
+public class  ContestQuestionDTO {
     private ContestDTO contestDTO;
     private String questionId;
     private Integer points;
@@ -11,6 +13,25 @@ public class    ContestQuestionDTO {
     private Boolean visible;
     private String contestQuestionId;
     private QuestionDTO questionDTO;
+    private UserAnswerDTO userAnswerDTO;
+
+    private List<UserAnswerDTO> allUserAnswerEntityList;
+
+    public List<UserAnswerDTO> getAllUserAnswerEntityList() {
+        return allUserAnswerEntityList;
+    }
+
+    public void setAllUserAnswerEntityList(List<UserAnswerDTO> allUserAnswerEntityList) {
+        this.allUserAnswerEntityList = allUserAnswerEntityList;
+    }
+
+    public UserAnswerDTO getUserAnswerDTO() {
+        return userAnswerDTO;
+    }
+
+    public void setUserAnswerDTO(UserAnswerDTO userAnswerDTO) {
+        this.userAnswerDTO = userAnswerDTO;
+    }
 
     public QuestionDTO getQuestionDTO() {
         return questionDTO;

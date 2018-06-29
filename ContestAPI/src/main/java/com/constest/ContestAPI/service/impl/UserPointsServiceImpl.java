@@ -1,28 +1,23 @@
 package com.constest.ContestAPI.service.impl;
 import com.constest.ContestAPI.dto.ContestDTO;
-import com.constest.ContestAPI.dto.OverAllLeaderBoardDTO;
 import com.constest.ContestAPI.dto.UserPointsDTO;
 import com.constest.ContestAPI.entity.ContestEntity;
-import com.constest.ContestAPI.entity.OverAllLeaderBoardEntity;
+import com.constest.ContestAPI.entity.LeaderBoard;
 import com.constest.ContestAPI.entity.UserPointsEntity;
-import com.constest.ContestAPI.repository.UserHistoryInterface;
 import com.constest.ContestAPI.repository.UserPointsRepository;
 import com.constest.ContestAPI.service.UserPointsService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigInteger;
+import java.util.*;
 
 @Service
 public class UserPointsServiceImpl implements UserPointsService {
 
     @Autowired
     UserPointsRepository userPointsRepositoryInterface;
-
-    @Autowired
-    UserHistoryInterface userHistoryInterface;
 
     @Override
     public boolean save(UserPointsDTO userPointsDTO) {
@@ -31,50 +26,8 @@ public class UserPointsServiceImpl implements UserPointsService {
         ContestEntity contestEntity = new ContestEntity();
         BeanUtils.copyProperties(userPointsDTO.getContestDTO(),contestEntity);
         userPointsEntity.setContestEntity(contestEntity);
-        try {
-            UserPointsEntity userPointsEntity1 = userPointsRepositoryInterface.save(userPointsEntity);
-            return true;
-        }
-        catch (Exception exception)
-        {
-            return false;
-        }
-    }
-
-    @Override
-    public int getByUserIdAndFinalPoints(String userId, int finalPoints) {
-        int sumPoints = 0;
-        List<UserPointsDTO> userPointsDTOList = new ArrayList<>();
-        List<UserPointsEntity> userPointsEntityList = userPointsRepositoryInterface.findAllByUserIdAndFinalPoints(userId,finalPoints);
-        for(UserPointsEntity userPointsEntity:userPointsEntityList)
-        {
-            UserPointsDTO userPointsDTO = new UserPointsDTO();
-            BeanUtils.copyProperties(userPointsEntity,userPointsDTO);
-            userPointsDTOList.add(userPointsDTO);
-            sumPoints = userPointsDTO.getFinalPoints()+sumPoints;
-        }
-        return sumPoints;
-    }
-
-    @Override
-    public List<UserPointsDTO> getByContestId(String contestId) {
-        ContestEntity contestEntity=new ContestEntity();
-        contestEntity.setContestId(contestId);
-        List<UserPointsEntity> userPointsEntityList = userPointsRepositoryInterface.findAllByContestEntity(contestEntity);
-        List<UserPointsDTO> userPointsDTOList = new ArrayList<>();
-        for(UserPointsEntity userPointsEntity:userPointsEntityList)
-        {
-            System.out.println(userPointsEntity);
-            UserPointsDTO userPointsDTO = new UserPointsDTO();
-            BeanUtils.copyProperties(userPointsEntity,userPointsDTO);
-            System.out.println(userPointsDTO);
-            ContestDTO contestDTO = new ContestDTO();
-            ContestEntity contestEntity1 = userPointsEntity.getContestEntity();
-            BeanUtils.copyProperties(contestEntity1,contestDTO);
-            userPointsDTO.setContestDTO(contestDTO);
-            userPointsDTOList.add(userPointsDTO);
-        }
-        return userPointsDTOList;
+        UserPointsEntity userPointsEntity1 = userPointsRepositoryInterface.save(userPointsEntity);
+        return true;
     }
 
     @Override
@@ -95,23 +48,47 @@ public class UserPointsServiceImpl implements UserPointsService {
         return userPointsDTOList;
     }
 
-
     @Override
-    public boolean saveToHistory(OverAllLeaderBoardEntity overAllLeaderBoardEntity) {
-        userHistoryInterface.save(overAllLeaderBoardEntity);
-        return true;
+    public int getByContestId(String contestId) {
+       List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestId(contestId);
+       return userPointsEntityList.size();
     }
 
     @Override
-    public List<OverAllLeaderBoardDTO> getAll() {
-        List<OverAllLeaderBoardEntity> overAllLeaderBoardEntityList =  userHistoryInterface.findAll();
-        List<OverAllLeaderBoardDTO> overAllLeaderBoardDTOList = new ArrayList<>();
-        for(OverAllLeaderBoardEntity overAllLeaderBoardEntity:overAllLeaderBoardEntityList)
+    public List<LeaderBoard> getOverAllLeaderBoard() {
+        List<Object[]> objects = userPointsRepositoryInterface.overAllBoard();
+        List<LeaderBoard> leaderBoards = new ArrayList<>();
+        int index = 0;
+        for(Object objects1:objects)
         {
-            OverAllLeaderBoardDTO overAllLeaderBoardDTO = new OverAllLeaderBoardDTO();
-            BeanUtils.copyProperties(overAllLeaderBoardEntity,overAllLeaderBoardDTO);
-            overAllLeaderBoardDTOList.add(overAllLeaderBoardDTO);
+            Object[] objects2 = objects.get(index);
+            LeaderBoard leaderBoard = new LeaderBoard();
+            leaderBoard.setUserId((String)objects2[0]);
+            leaderBoard.setFinalPoints((BigInteger)objects2[1]);
+            leaderBoard.setRank((BigInteger)objects2[2]);
+            leaderBoards.add(leaderBoard);
+            index++;
         }
-        return overAllLeaderBoardDTOList;
+        return leaderBoards;
+    }
+
+    @Override
+    public List<LeaderBoard> getContestWiseLeaderBoard(String contestId) {
+       List<Object[]> objects = userPointsRepositoryInterface.getContestWiseLeaderBoard(contestId);
+       List<LeaderBoard> leaderBoards = new ArrayList<>();
+       int index = 0;
+       for(Object objects1:objects)
+       {
+           Object[] objects2 = objects.get(index);
+           LeaderBoard leaderBoard = new LeaderBoard();
+           leaderBoard.setUserId((String)objects2[0]);
+           leaderBoard.setFinalPoints(BigInteger.valueOf((int)objects2[1]));
+           leaderBoard.setRank((BigInteger)objects2[2]);
+           leaderBoards.add(leaderBoard);
+           index++;
+       }
+       return leaderBoards;
     }
 }
+
+

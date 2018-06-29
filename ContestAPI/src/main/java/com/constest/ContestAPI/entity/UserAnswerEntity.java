@@ -1,9 +1,9 @@
 package com.constest.ContestAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = UserAnswerEntity.TABLE_NAME)
@@ -17,13 +17,12 @@ public class UserAnswerEntity {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = UserAnswerEntity.ID_COLUMN)
     private String userAnswerId;
-    private String userContestId;
     private String userId;
     private String answer;
-    private int points;
+    private Integer points;
     private Boolean skipped;
-    private Timestamp timeOfAnswer;
-
+    private String timeOfAnswer;
+    private Boolean answered=false;
     public String getUserAnswerId() {
         return userAnswerId;
     }
@@ -33,12 +32,10 @@ public class UserAnswerEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "contestQuestionId", nullable = false)
+    @JsonBackReference
+    @JoinColumn(name = "contest_question_id")
     ContestQuestionEntity contestQuestionEntity;
 
-    //  @ManyToOne
-    //  @JoinColumn(name="userContestId",nullable = false)
-    //  UserPointsEntity userPointsEntity;
 
 
     public Boolean getSkipped() {
@@ -55,14 +52,6 @@ public class UserAnswerEntity {
     }
 
 
-    public String getUserContestId() {
-        return userContestId;
-    }
-
-    public void setUserContestId(String userContestId) {
-        this.userContestId = userContestId;
-    }
-
     public String getAnswer() {
         return answer;
     }
@@ -76,7 +65,7 @@ public class UserAnswerEntity {
     }
 
     public void setSkipped(Boolean skipped) {
-        skipped = skipped;
+        this.skipped = skipped;
     }
 
     public String getUserId() {
@@ -87,28 +76,36 @@ public class UserAnswerEntity {
         this.userId = userId;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public Timestamp getTimeOfAnswer() {
+    public String getTimeOfAnswer() {
         return timeOfAnswer;
     }
 
-    public void setTimeOfAnswer(Timestamp timeOfAnswer) {
+    public void setTimeOfAnswer(String timeOfAnswer) {
         this.timeOfAnswer = timeOfAnswer;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Boolean getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(Boolean answered) {
+        this.answered = answered;
     }
 
     @Override
     public String toString() {
         return "UserAnswerEntity{" +
                 "userAnswerId='" + userAnswerId + '\'' +
-                ", userContestId='" + userContestId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", answer='" + answer + '\'' +
                 ", points=" + points +
                 ", skipped=" + skipped +
                 ", timeOfAnswer=" + timeOfAnswer +
+                ", answered=" + answered +
                 ", contestQuestionEntity=" + contestQuestionEntity +
                 '}';
     }

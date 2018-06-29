@@ -27,4 +27,4 @@
 
 ### Project files ####
 /target/*
-/src/main/resource/apllication.properties
+/src/main/resource/application.properties

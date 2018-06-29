@@ -1,5 +1,6 @@
 package com.constest.ContestAPI.service.impl;
 
+import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import com.constest.ContestAPI.repository.ContestQuestionRepository;
 import com.constest.ContestAPI.service.ContestQuestionService;
@@ -30,5 +31,8 @@ public class ContestQuestionServiceImpl implements ContestQuestionService {
         return contestQuestionRepository.findById(contestQuestionId).get();
     }
 
-
+    @Override
+    public Boolean isContestExists(ContestEntity contestEntity) {
+        return contestQuestionRepository.existsByContestEntity(contestEntity);
+    }
 }

@@ -1,7 +1,5 @@
 package com.constest.ContestAPI.dto;
 
-import java.util.List;
-
 public class UserPointsDTO {
     private String userId;
     private ContestDTO contestDTO;
