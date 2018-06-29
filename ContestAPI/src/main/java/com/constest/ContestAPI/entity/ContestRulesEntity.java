@@ -13,7 +13,7 @@ public class ContestRulesEntity {
     static final String ID_COLUMN = "contest_id";
 
     @Id
-    @Column(name =  ContestQuestionEntity.ID_COLUMN)
+    @Column(name =  ContestRulesEntity.ID_COLUMN)
     String rulesId;
 
     int numQuestions;

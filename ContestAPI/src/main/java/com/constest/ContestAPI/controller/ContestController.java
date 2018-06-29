@@ -119,12 +119,12 @@ public class ContestController {
         ContestEntity contestEntity = new ContestEntity();
         contestEntity.setContestId(contestId);
         boolean isContestExists = contestQuestionService.isContestExists(contestEntity);
-
         if (!isContestExists) {
             return null;
         }
 
         contestEntity = contestService.getAllContestQuestions(contestId);
+        System.out.println("contest entity"+contestEntity);
         ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
         List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
@@ -143,11 +143,12 @@ public class ContestController {
 
 
             contestQuestionDTO.setQuestionDTO(this.getQuestion(contestQuestionEntity.getQuestionId()));
-
             count++;
             contestQuestionDTOList.add(contestQuestionDTO);
         }
         contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
+        System.out.println("contest dip "+contestDTO);
+
         return contestDTO;
     }
 

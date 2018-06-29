@@ -58,6 +58,7 @@ public class ContestQuestionController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/pushQuestion/{contestQuestionId}")
     public Boolean pushQuestion(@PathVariable("contestQuestionId") String contestQuestionId) {
+        System.out.println("push dynamic");
         ContestQuestionEntity contestQuestionEntity = contestQuestionService.getContestQuestionById(contestQuestionId);
         QuestionDTO questionDTO = this.getQuestion(contestQuestionEntity.getQuestionId());
         FCMService fcmService = new FCMService();
@@ -65,7 +66,7 @@ public class ContestQuestionController {
         BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
         contestQuestionDTO.setQuestionDTO(questionDTO);
         String msg = fcmService.postQuestionToUsers(contestQuestionEntity.getContestEntity().getContestId(), contestQuestionDTO);
-        System.out.println(msg);
+        System.out.println(msg+" msg");
         return true;
 
 
