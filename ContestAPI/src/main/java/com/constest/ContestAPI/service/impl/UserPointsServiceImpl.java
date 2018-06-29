@@ -65,23 +65,12 @@ public class UserPointsServiceImpl implements UserPointsService {
     public List<LeaderBoard> getOverAllLeaderBoard() {
         List<Object[]> objects = userPointsRepositoryInterface.overAllBoard();
         List<LeaderBoard> leaderBoards = new ArrayList<>();
-        List<OverAllLeaderBoard> overAllLeaderBoards = new ArrayList<>();
         int index = 0;
         for(Object objects1:objects)
         {
             Object[] objects2 = objects.get(index);
-            //OverAllLeaderBoard overAllLeaderBoard = new OverAllLeaderBoard();
             LeaderBoard leaderBoard = new LeaderBoard();
             String userId = (String) objects2[0];
-            //String finalPoints = (String) objects2[1];
-//            overAllLeaderBoard.setUserId(getUserName(userId));
-//            overAllLeaderBoard.setRank((BigInteger)objects2[2]);
-//            overAllLeaderBoards.add(overAllLeaderBoard);
-//            Object bigIntegers = objects2[1];
-
-
-
-
            leaderBoard.setUserId(getUserName(userId));
 
             leaderBoard.setFinalPoints((BigInteger)objects2[1]);
