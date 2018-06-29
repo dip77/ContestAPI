@@ -48,11 +48,11 @@ public class UserPointsServiceImpl implements UserPointsService {
         return userPointsDTOList;
     }
 
-    @Override
-    public int getByContestId(String contestId) {
-       List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestId(contestId);
-       return userPointsEntityList.size();
-    }
+//    @Override
+//    public int getByContestId(String contestId) {
+//       List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestId(contestId);
+//       return userPointsEntityList.size();
+//    }
 
     @Override
     public List<LeaderBoard> getOverAllLeaderBoard() {

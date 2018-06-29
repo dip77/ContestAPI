@@ -1,11 +1,9 @@
 package com.constest.ContestAPI.service.impl;
 
 import com.constest.ContestAPI.entity.ContestEntity;
-import com.constest.ContestAPI.entity.ContestQuestionEntity;
 import com.constest.ContestAPI.repository.ContestRepository;
 import com.constest.ContestAPI.service.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

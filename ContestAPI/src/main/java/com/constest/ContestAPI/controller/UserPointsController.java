@@ -48,19 +48,19 @@ public class UserPointsController {
         return userPointsServiceInterface.getContestWiseLeaderBoard(contestId);
     }
 
-    @RequestMapping(method = RequestMethod.POST,value = "/getReport/contestWise")
-    public List<ReportDTO> getReport(@RequestBody List<String> contestIdList)
-    {
-        List<ReportDTO> reportDTOList = new ArrayList<>();
-        for (String contestId:contestIdList) {
-            Integer contestWiseUsers = userPointsServiceInterface.getByContestId(contestId);
-            ReportDTO reportDTO = new ReportDTO();
-            reportDTO.setContestId(contestId);
-            reportDTO.setNumberOfUsers(contestWiseUsers);
-            reportDTOList.add(reportDTO);
-        }
-        return reportDTOList;
-    }
+//    @RequestMapping(method = RequestMethod.POST,value = "/getReport/contestWise")
+//    public List<ReportDTO> getReport(@RequestBody List<String> contestIdList)
+//    {
+//        List<ReportDTO> reportDTOList = new ArrayList<>();
+//        for (String contestId:contestIdList) {
+//         //   Integer contestWiseUsers = userPointsServiceInterface.getByContestId(contestId);
+//            ReportDTO reportDTO = new ReportDTO();
+//            reportDTO.setContestId(contestId);
+//            reportDTO.setNumberOfUsers(contestWiseUsers);
+//            reportDTOList.add(reportDTO);
+//        }
+//        return reportDTOList;
+//    }
 
     @RequestMapping(method = RequestMethod.GET,value = "/getReport/overAllUsers")
     public Integer getUsers()

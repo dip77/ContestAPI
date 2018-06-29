@@ -1,7 +1,6 @@
 package com.constest.ContestAPI.repository;
 
 import com.constest.ContestAPI.entity.ContestEntity;
-import com.constest.ContestAPI.entity.LeaderBoard;
 import com.constest.ContestAPI.entity.UserPointsEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,7 +13,7 @@ public interface UserPointsRepository extends CrudRepository<UserPointsEntity,St
 
     List<UserPointsEntity> findAllByUserId(String userId);
     List<UserPointsEntity> findAllByContestEntity(ContestEntity contestEntity);
-    List<UserPointsEntity> getByContestId(String contestId);
+    //List<UserPointsEntity> getByContestId(String contestId);
 
     @Query(value = "SELECT * FROM user_points p where p.contest_id = ?#{[0]} order by final_points desc",nativeQuery = true)
     List<UserPointsEntity> test(String contest_id);

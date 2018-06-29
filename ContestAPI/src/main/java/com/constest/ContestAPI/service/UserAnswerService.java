@@ -13,7 +13,7 @@ public interface UserAnswerService {
 
     public List<UserAnswerEntity> getUserAllAnswers(String userId);
 
-    public String getFastestAnswer(String contestQuestionId) throws InterruptedException;
+    public boolean getFastestAnswer(String contestQuestionId);
 
     public UserAnswerEntity getUserEntity(String userId, String contestQuestionId);
 
