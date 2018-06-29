@@ -45,13 +45,16 @@ public class ContestController {
     private UserPointsService userPointsService;
 
     private int bonus = 5;
+
     @RequestMapping(method = RequestMethod.POST, value = "/createContest")
-    public Boolean saveContest(@RequestBody ContestDTO contestDTO) {
+    public ContestDTO saveContest(@RequestBody ContestDTO contestDTO) {
         ContestEntity contestEntity = new ContestEntity();
-        System.out.println(contestDTO.getStartDate());
         contestEntity.setContestType(contestDTO.getContestType().toLowerCase());
         BeanUtils.copyProperties(contestDTO, contestEntity);
-        return contestService.saveContest(contestEntity);
+        contestEntity = contestService.saveContest(contestEntity);
+        ContestDTO contestDTO1=new ContestDTO();
+        BeanUtils.copyProperties(contestEntity,contestDTO1);
+        return contestDTO1;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAll")
@@ -74,20 +77,41 @@ public class ContestController {
             }
             contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
             contestDTOList.add(contestDTO);
+
         }
         return contestDTOList;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllCompleted")
+    public List<ContestDTO> getAllCompletedContest() {
+
+        List<ContestEntity> contestEntityList = contestService.getAll();
+        List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
+        for (ContestEntity contestEntity : contestEntityList) {
+            ContestDTO contestDTO = new ContestDTO();
+            if (ValidationUtil.compare(contestEntity.getEndDate())) {
+                continue;
+            }
+            //  System.out.println(contestEntity.getContestQuestionEntityList());
+            List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
+            BeanUtils.copyProperties(contestEntity, contestDTO);
+            for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
+                ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
+                BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
+                contestQuestionDTOList.add(contestQuestionDTO);
+            }
+            contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
+            contestDTOList.add(contestDTO);
+
+        }
+        return contestDTOList;
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestsByCategory/{categoryId}")
     public List<ContestDTO> getContestsByCategory(@PathVariable("categoryId") String categoryId) {
         List<ContestEntity> contestEntityList = contestService.getAllByCategory(categoryId);
         List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
         for (ContestEntity contestEntity : contestEntityList) {
-            if (!ValidationUtil.compare(contestEntity.getEndDate())) {
-                continue;
-            }
-
             ContestDTO contestDTO = new ContestDTO();
             BeanUtils.copyProperties(contestEntity, contestDTO);
             contestDTOList.add(contestDTO);
@@ -114,16 +138,16 @@ public class ContestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestQuestions/{contestId}/{userId}")
     public ContestDTO getContestQuestions(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
-
+        System.out.println("contest id "+contestId);
         ContestEntity contestEntity = new ContestEntity();
         contestEntity.setContestId(contestId);
         boolean isContestExists = contestQuestionService.isContestExists(contestEntity);
-
         if (!isContestExists) {
             return null;
         }
 
         contestEntity = contestService.getAllContestQuestions(contestId);
+        System.out.println("contest entity "+contestEntity);
         ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
         List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
@@ -131,12 +155,11 @@ public class ContestController {
 
         int count = 0;
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
+            System.out.println("contest question "+contestQuestionEntity);
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
-            System.out.println(contestQuestionDTO.getContestQuestionId());
             UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
             UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
-            System.out.println(userAnswerEntity + " user");
             if (userAnswerEntity != null) {
                 BeanUtils.copyProperties(userAnswerEntity, userAnswerDTO);
                 contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
@@ -144,21 +167,25 @@ public class ContestController {
 
 
             contestQuestionDTO.setQuestionDTO(this.getQuestion(contestQuestionEntity.getQuestionId()));
-
             count++;
             contestQuestionDTOList.add(contestQuestionDTO);
         }
         contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
+        System.out.println("contest dip "+contestQuestionDTOList);
+
         return contestDTO;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestPoints/{contestId}/{userId}")
     public Boolean getContestPoints(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
+<<<<<<< HEAD
 
+=======
+        System.out.println("get points()");
+>>>>>>> c7ce109cbfc69f6aeefab478df6eb4e15e55a127
         ContestEntity contestEntity = new ContestEntity();
         contestEntity.setContestId(contestId);
         boolean isContestExists = contestQuestionService.isContestExists(contestEntity);
-
         if (!isContestExists) {
             return null;
         }
@@ -170,18 +197,17 @@ public class ContestController {
         UserPointsDTO userPointsDTO = new UserPointsDTO();
         //this function will call API of Question microservice
 
-        int count = 0,points=0,easyCorrectlyAnswered = 0,mediumCorrectlyAnswered=0,hardCorrectlyAnswered=0,flag=0;
+        int count = 0, points = 0, easyCorrectlyAnswered = 0, mediumCorrectlyAnswered = 0, hardCorrectlyAnswered = 0, flag = 0;
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
             BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
-            System.out.println(contestQuestionDTO.getContestQuestionId());
             UserAnswerDTO userAnswerDTO = new UserAnswerDTO();
+            System.out.println("userId" + userId);
+            System.out.println("contest question entity" + contestQuestionEntity);
             UserAnswerEntity userAnswerEntity = userAnswerService.getUserEntity(userId, contestQuestionEntity.getContestQuestionId());
-            System.out.println(userAnswerEntity + " user");
             if (userAnswerEntity != null) {
                 int point = userAnswerEntity.getPoints();
-                switch (point)
-                {
+                switch (point) {
                     case 1:
                         easyCorrectlyAnswered++;
                         break;
@@ -191,30 +217,27 @@ public class ContestController {
                     case 3:
                         hardCorrectlyAnswered++;
                         break;
-                     default:
-                            flag=1;
-                            break;
+                    default:
+                        flag = 1;
+                        break;
                 }
                 points += userAnswerEntity.getPoints();
-                 contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
+                contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
             }
             count++;
         }
-        System.out.println("points"+points);
+        System.out.println("points" + points);
         userPointsDTO.setEasyCorrectlyAnswered(easyCorrectlyAnswered);
         userPointsDTO.setHardCorrectlyAnswered(hardCorrectlyAnswered);
         userPointsDTO.setMediumCorrectlyAnswered(mediumCorrectlyAnswered);
         userPointsDTO.setUserId(userId);
         userPointsDTO.setContestDTO(contestDTO);
-        if(flag==0)
-        {
-            userPointsDTO.setBonus(bonus);
-        }
-        else
-        {
+        if (flag == 0) {
+            userPointsDTO.setBonus(contestDTO.getBonus());
+        } else {
             userPointsDTO.setBonus(0);
         }
-        userPointsDTO.setFinalPoints(points+userPointsDTO.getBonus());
+        userPointsDTO.setFinalPoints(points + userPointsDTO.getBonus());
         userPointsService.save(userPointsDTO);
         return true;
     }
@@ -234,19 +257,17 @@ public class ContestController {
     }
 
     public QuestionDTO getQuestion(String questionId) {
-        System.out.println(questionId);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("questionId", questionId);
-        String URL = "http://10.177.2.15:8080/question/getOne/" + questionId;
+        String URL = "http://10.177.2.201:8081/question/getOne/" + questionId;
         HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
         ResponseEntity<QuestionDTO> rs = restTemplate.exchange(URL, HttpMethod.GET,
                 entity, new ParameterizedTypeReference<QuestionDTO>() {
                 });
         if (rs.getStatusCode() == HttpStatus.OK) {
-            System.out.println(restTemplate.getUriTemplateHandler().toString());
             return rs.getBody();
         }
 

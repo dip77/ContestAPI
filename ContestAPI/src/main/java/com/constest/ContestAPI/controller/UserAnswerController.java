@@ -18,15 +18,16 @@ public class UserAnswerController {
 
     @RequestMapping(method = RequestMethod.POST, value = "saveAnswer")
     public Boolean userAnswer(@RequestBody UserAnswerDTO userAnswerDTO) {
+        System.out.println("save answer "+userAnswerDTO);
         Boolean userAnswerDTO1 = userAnswerService.save(userAnswerDTO);
         return userAnswerDTO1;
     }
 
     //todo : phani : not to use this method outside
-    // @RequestMapping(method = RequestMethod.GET, value = "getFastestUser/{contestQuestionId}")
-    // public String getFastestUser(@PathVariable String contestQuestionId) {
-    //     return userAnswerService.getFastestAnswer(contestQuestionId);
-    // }
+     @RequestMapping(method = RequestMethod.GET, value = "getFastestUser/{contestQuestionId}")
+     public String getFastestUser(@PathVariable String contestQuestionId) throws InterruptedException {
+         return userAnswerService.getFastestAnswer(contestQuestionId);
+     }
 
 
     @RequestMapping(method = RequestMethod.GET, value = "getUserEntity/{userId}/{contestQuestionId}")

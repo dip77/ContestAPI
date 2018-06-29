@@ -61,6 +61,7 @@ public class UserPointsServiceImpl implements UserPointsService {
         return userPointsEntityList.size();
     }
 
+
     @Override
     public List<LeaderBoard> getOverAllLeaderBoard() {
         List<Object[]> objects = userPointsRepositoryInterface.overAllBoard();
@@ -73,7 +74,18 @@ public class UserPointsServiceImpl implements UserPointsService {
             String userId = (String) objects2[0];
            leaderBoard.setUserId(getUserName(userId));
 
+            leaderBoard.setUserId((String)objects2[0]);
+//            leaderBoard.setFinalPoints((BigInteger)objects2[1]);
+            if(objects2[1] instanceof  String)
+                System.out.println("string");
+            else if(objects2[1] instanceof BigInteger)
+                System.out.println("Big");
+            else
+                System.out.println("none");
             leaderBoard.setFinalPoints((BigInteger)objects2[1]);
+          //  leaderBoard.setPointInt((Integer)objects2[1]);
+            leaderBoard.setFinalPointsString(((BigInteger)objects2[1]).toString());
+            System.out.println(leaderBoard.getFinalPoints());
             leaderBoard.setRank((BigInteger)objects2[2]);
             leaderBoards.add(leaderBoard);
             System.out.println(leaderBoard);
@@ -105,7 +117,7 @@ public class UserPointsServiceImpl implements UserPointsService {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        String URL = "http://10.177.2.200:8082/user/getUserName/"+userId;
+        String URL = "http://10.177.2.201:8082/user/getUserName/"+userId;
         HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
         ResponseEntity<String> rs = restTemplate.exchange(URL, HttpMethod.GET,
                 entity, new ParameterizedTypeReference<String>() {

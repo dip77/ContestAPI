@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.client.RestTemplate;
 import sun.rmi.runtime.Log;
 
@@ -38,11 +39,18 @@ public class ContestQuestionController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/addQuestions")
-    public Boolean saveQuestion(@RequestBody List<ContestQuestionDTO> contestQuestionDTOList) {
-        List<ContestQuestionEntity> contestQuestionEntityList = new ArrayList<ContestQuestionEntity>();
+    public Boolean saveQuestions(@RequestBody List<ContestQuestionDTO> contestQuestionDTOList) {
+        System.out.println("add questions");
+         List<ContestQuestionEntity> contestQuestionEntityList = new ArrayList<ContestQuestionEntity>();
         for (ContestQuestionDTO contestQuestionDTO : contestQuestionDTOList) {
+            System.out.println(contestQuestionDTO.getQuestionId()+" question id");
             ContestQuestionEntity contestQuestionEntity = new ContestQuestionEntity();
             BeanUtils.copyProperties(contestQuestionDTO, contestQuestionEntity);
+            ContestEntity contestEntity=new ContestEntity();
+            System.out.println(contestQuestionDTO.getContestDTO().getContestId());
+            contestEntity.setContestId(contestQuestionDTO.getContestDTO().getContestId());
+            contestQuestionEntity.setContestEntity(contestEntity);
+
             contestQuestionEntityList.add(contestQuestionEntity);
         }
         return contestQuestionService.saveQuestions(contestQuestionEntityList);
@@ -50,6 +58,7 @@ public class ContestQuestionController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/pushQuestion/{contestQuestionId}")
     public Boolean pushQuestion(@PathVariable("contestQuestionId") String contestQuestionId) {
+        System.out.println("push dynamic");
         ContestQuestionEntity contestQuestionEntity = contestQuestionService.getContestQuestionById(contestQuestionId);
         QuestionDTO questionDTO = this.getQuestion(contestQuestionEntity.getQuestionId());
         FCMService fcmService = new FCMService();
@@ -57,9 +66,13 @@ public class ContestQuestionController {
         BeanUtils.copyProperties(contestQuestionEntity, contestQuestionDTO);
         contestQuestionDTO.setQuestionDTO(questionDTO);
         String msg = fcmService.postQuestionToUsers(contestQuestionEntity.getContestEntity().getContestId(), contestQuestionDTO);
+<<<<<<< HEAD
         System.out.println(msg);
 
 
+=======
+        System.out.println(msg+" msg");
+>>>>>>> c7ce109cbfc69f6aeefab478df6eb4e15e55a127
         return true;
 
 
@@ -84,7 +97,7 @@ public class ContestQuestionController {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("questionId", questionId);
-        String URL = "http://10.177.2.15:8080/question/getOne/" + questionId;
+        String URL = "http://10.177.2.201:8081/question/getOne/" + questionId;
         HttpEntity<Object> entity = new HttpEntity<Object>(httpHeaders);
         ResponseEntity<QuestionDTO> rs = restTemplate.exchange(URL, HttpMethod.GET,
                 entity, new ParameterizedTypeReference<QuestionDTO>() {
