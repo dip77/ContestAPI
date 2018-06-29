@@ -53,6 +53,7 @@ public class UserPointsServiceImpl implements UserPointsService {
         return userPointsDTOList;
     }
 
+
     @Override
     public int getByContestId(String contestId) {
         ContestEntity contestEntity = new ContestEntity();
@@ -60,6 +61,7 @@ public class UserPointsServiceImpl implements UserPointsService {
         List<UserPointsEntity> userPointsEntityList= userPointsRepositoryInterface.getByContestEntity(contestEntity);
         return userPointsEntityList.size();
     }
+
 
 
     @Override

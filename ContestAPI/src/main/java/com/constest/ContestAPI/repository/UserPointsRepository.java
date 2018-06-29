@@ -1,7 +1,6 @@
 package com.constest.ContestAPI.repository;
 
 import com.constest.ContestAPI.entity.ContestEntity;
-import com.constest.ContestAPI.entity.LeaderBoard;
 import com.constest.ContestAPI.entity.UserPointsEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

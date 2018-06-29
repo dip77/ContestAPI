@@ -25,7 +25,7 @@ public class UserAnswerController {
 
     //todo : phani : not to use this method outside
      @RequestMapping(method = RequestMethod.GET, value = "getFastestUser/{contestQuestionId}")
-     public String getFastestUser(@PathVariable String contestQuestionId) throws InterruptedException {
+     public boolean getFastestUser(@PathVariable String contestQuestionId) throws InterruptedException {
          return userAnswerService.getFastestAnswer(contestQuestionId);
      }
 

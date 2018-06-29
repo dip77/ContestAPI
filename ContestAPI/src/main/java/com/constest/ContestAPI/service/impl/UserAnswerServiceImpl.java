@@ -43,6 +43,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         userAnswerEntity.setTimeOfAnswer(time);
         String points = null;
         if (userAnswerEntity.getAnswer() != null) {
+            System.out.println("Inside getAnswer");
             points = checkAnswer(userAnswerDTO.getContestQuestionDTO().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
         if (points!=null){
             userAnswerEntity.setPoints(Integer.parseInt(points));
@@ -56,8 +57,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                 }
             }
         }
-        //  System.out.println(userAnswerEntity);
-
+        System.out.println(userAnswerEntity);
         userAnswerRepository.save(userAnswerEntity);
         return true;
     }
@@ -90,16 +90,23 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
 
     @Override
-    public String getFastestAnswer(String contestQuestionId) throws InterruptedException {
-        Thread.sleep(5000);
-        String userAnswerId = userAnswerRepository.getFastestTime(contestQuestionId);
-        UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
-        userAnswerEntity = userAnswerRepository.findById(userAnswerId).get();
-        System.out.println("\nQuestion Id" + userAnswerEntity.getContestQuestionEntity().getQuestionId() + "\n" + userAnswerEntity.getAnswer().toUpperCase());
-        String points = checkAnswer(userAnswerEntity.getContestQuestionEntity().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
-        userAnswerEntity.setPoints(Integer.parseInt(points));
-        userAnswerRepository.save(userAnswerEntity);
-        return userAnswerId;
+    public boolean getFastestAnswer(String contestQuestionId)  {
+        List<String> userAnswerIds = userAnswerRepository.getFastestTime(contestQuestionId);
+        if(userAnswerIds.size()!=0) {
+            int index = 0;
+            for (index = 0; index < userAnswerIds.size(); index++) {
+                if (userAnswerIds.get(index) != null) {
+                    UserAnswerEntity userAnswerEntity = new UserAnswerEntity();
+                    userAnswerEntity = userAnswerRepository.findById(userAnswerIds.get(index)).get();
+                    System.out.println("\nQuestion Id" + userAnswerEntity.getContestQuestionEntity().getQuestionId() + "\n" + userAnswerEntity.getAnswer().toUpperCase());
+                    String points = checkAnswer(userAnswerEntity.getContestQuestionEntity().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
+                    userAnswerEntity.setPoints(Integer.parseInt(points));
+                    userAnswerRepository.save(userAnswerEntity);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

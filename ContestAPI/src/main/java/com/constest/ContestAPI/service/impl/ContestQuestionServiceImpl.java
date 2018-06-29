@@ -27,7 +27,7 @@ public class ContestQuestionServiceImpl implements ContestQuestionService {
     }
 
     @Override
-    public ContestQuestionEntity getContestQuestionById(String contestQuestionId) {
+    public ContestQuestionEntity    getContestQuestionById(String contestQuestionId) {
         return contestQuestionRepository.findById(contestQuestionId).get();
     }
 
