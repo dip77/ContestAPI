@@ -32,7 +32,9 @@ public class UserPointsServiceImpl implements UserPointsService {
         ContestEntity contestEntity = new ContestEntity();
         BeanUtils.copyProperties(userPointsDTO.getContestDTO(), contestEntity);
         userPointsEntity.setContestEntity(contestEntity);
-        UserPointsEntity userPointsEntity1 = userPointsRepositoryInterface.save(userPointsEntity);
+        if(!existsByUserIdAndContestEntity(userPointsEntity.getUserId(),userPointsEntity.getContestEntity())) {
+            UserPointsEntity userPointsEntity1 = userPointsRepositoryInterface.save(userPointsEntity);
+        }
         return true;
     }
 
@@ -60,6 +62,12 @@ public class UserPointsServiceImpl implements UserPointsService {
         contestEntity.setContestId(contestId);
         List<UserPointsEntity> userPointsEntityList = userPointsRepositoryInterface.getByContestEntity(contestEntity);
         return userPointsEntityList.size();
+    }
+
+    @Override
+    public boolean existsByUserIdAndContestEntity(String userId, ContestEntity contestEntity) {
+        userPointsRepositoryInterface.existsByUserIdAndContestEntity(userId,contestEntity);
+        return true;
     }
 
 

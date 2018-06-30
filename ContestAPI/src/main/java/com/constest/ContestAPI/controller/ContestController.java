@@ -138,6 +138,17 @@ public class ContestController {
         }
         return contestDTOList;
     }
+    @RequestMapping(method = RequestMethod.GET, value = "/getContestsByTypeAdmin/{contestType}")
+    public List<ContestDTO> getContestsByTypeAdmin(@PathVariable("contestType") String contestType) {
+        List<ContestEntity> contestEntityList = contestService.getAllByContestType(contestType);
+        List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
+        for (ContestEntity contestEntity : contestEntityList) {
+            ContestDTO contestDTO = new ContestDTO();
+            BeanUtils.copyProperties(contestEntity, contestDTO);
+            contestDTOList.add(contestDTO);
+        }
+        return contestDTOList;
+    }
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestQuestions/{contestId}/{userId}")

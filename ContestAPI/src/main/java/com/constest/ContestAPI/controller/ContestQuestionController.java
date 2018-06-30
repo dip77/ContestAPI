@@ -74,13 +74,14 @@ public class ContestQuestionController {
         System.out.println(msg);
 
         int timed = 30000;
-        if (!questionType.equals("text") || !questionType.equals("image")) {
-            timed = 30000;
+        if (questionType.equals("video") || questionType.equals("audio")) {
+            timed = 47000;
         }
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 userAnswerService.getFastestAnswer(contestQuestionId);
+                fcmService.postStatusToUsers(contestQuestionEntity.getContestEntity().getContestId(),"next");
                 fcmService.postStatusToAdmin(contestQuestionEntity.getContestEntity().getContestId(),"next");
             }
         }, timed);
