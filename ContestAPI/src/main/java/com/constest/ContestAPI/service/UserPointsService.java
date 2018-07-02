@@ -14,5 +14,4 @@ public interface UserPointsService {
     List<LeaderBoard> getOverAllLeaderBoard();
     int getByContestId(String contestId);
     boolean existsByUserIdAndContestEntity(String userId,ContestEntity contestEntity);
-
 }

@@ -7,17 +7,16 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserAnswerService {
+
     public Boolean save(UserAnswerDTO userAnswerDTO);
 
     public Optional<UserAnswerEntity> getSingleUser(String userAnswerId);
 
     public List<UserAnswerEntity> getUserAllAnswers(String userId);
 
-    public boolean getFastestAnswer(String contestQuestionId);
+    public List<String> getFastestAnswer(String contestQuestionId);
 
     public UserAnswerEntity getUserEntity(String userId, String contestQuestionId);
 
     public String checkAnswer(String questionId, String answer);
-
-
 }

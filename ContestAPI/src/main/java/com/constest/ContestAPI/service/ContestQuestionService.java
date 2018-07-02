@@ -1,6 +1,5 @@
 package com.constest.ContestAPI.service;
 
-import com.constest.ContestAPI.dto.ContestQuestionDTO;
 import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
 

@@ -1,9 +1,5 @@
 package com.constest.ContestAPI.dto;
 
-import com.constest.ContestAPI.entity.ContestQuestionEntity;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 import java.util.List;
 
 public class ContestDTO {

@@ -11,20 +11,12 @@ import com.constest.ContestAPI.service.impl.ContestServiceImpl;
 import com.constest.ContestAPI.util.ValidationUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.ParameterizedType;
-import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,7 +51,6 @@ public class ContestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAll")
     public List<ContestDTO> getAllContest() {
-
         List<ContestEntity> contestEntityList = contestService.getAll();
         List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
         for (ContestEntity contestEntity : contestEntityList) {
@@ -67,7 +58,6 @@ public class ContestController {
             if (!ValidationUtil.compare(contestEntity.getEndDate())) {
                 continue;
             }
-            //  System.out.println(contestEntity.getContestQuestionEntityList());
             List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
             BeanUtils.copyProperties(contestEntity, contestDTO);
             for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
@@ -77,7 +67,6 @@ public class ContestController {
             }
             contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
             contestDTOList.add(contestDTO);
-
         }
         return contestDTOList;
     }
@@ -92,7 +81,6 @@ public class ContestController {
             if (ValidationUtil.compare(contestEntity.getEndDate())) {
                 continue;
             }
-            //  System.out.println(contestEntity.getContestQuestionEntityList());
             List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
             BeanUtils.copyProperties(contestEntity, contestDTO);
             for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
@@ -102,18 +90,20 @@ public class ContestController {
             }
             contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
             contestDTOList.add(contestDTO);
-
         }
         return contestDTOList;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getContestsByCategory/{categoryId}")
     public List<ContestDTO> getContestsByCategory(@PathVariable("categoryId") String categoryId) {
+
         List<ContestEntity> contestEntityList = contestService.getAllByCategory(categoryId);
         List<ContestDTO> contestDTOList = new ArrayList<ContestDTO>();
         for (ContestEntity contestEntity : contestEntityList) {
-            System.out.println(ValidationUtil.compare(contestEntity.getEndDate())+" check"+contestEntity.getEndDate());
-            if (ValidationUtil.compare(contestEntity.getStartDate())&&!ValidationUtil.compare(contestEntity.getEndDate())) {
+            System.out.print(contestEntity.getContestName());
+            System.out.print("start "+ValidationUtil.compare(contestEntity.getStartDate()));
+            System.out.println("  end "+!ValidationUtil.compare(contestEntity.getEndDate()));
+            if (ValidationUtil.compare(contestEntity.getStartDate())||!ValidationUtil.compare(contestEntity.getEndDate())) {
                 continue;
             }
             ContestDTO contestDTO = new ContestDTO();
@@ -131,7 +121,6 @@ public class ContestController {
             if (ValidationUtil.compare(contestEntity.getStartDate())&&!ValidationUtil.compare(contestEntity.getEndDate())) {
                 continue;
             }
-
             ContestDTO contestDTO = new ContestDTO();
             BeanUtils.copyProperties(contestEntity, contestDTO);
             contestDTOList.add(contestDTO);
@@ -150,7 +139,6 @@ public class ContestController {
         return contestDTOList;
     }
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/getContestQuestions/{contestId}/{userId}")
     public ContestDTO getContestQuestions(@PathVariable("contestId") String contestId, @PathVariable("userId") String userId) {
         System.out.println("contest id "+contestId);
@@ -166,8 +154,8 @@ public class ContestController {
         ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
         List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
-        //this function will call API of Question microservice
 
+        //this function will call API of Question microservice
         int count = 0;
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             System.out.println("contest question "+contestQuestionEntity);
@@ -179,15 +167,12 @@ public class ContestController {
                 BeanUtils.copyProperties(userAnswerEntity, userAnswerDTO);
                 contestQuestionDTO.setUserAnswerDTO(userAnswerDTO);
             }
-
-
             contestQuestionDTO.setQuestionDTO(this.getQuestion(contestQuestionEntity.getQuestionId()));
             count++;
             contestQuestionDTOList.add(contestQuestionDTO);
         }
         contestDTO.setContestQuestionDTOList(contestQuestionDTOList);
         System.out.println("contest dip "+contestQuestionDTOList);
-
         return contestDTO;
     }
 
@@ -199,14 +184,13 @@ public class ContestController {
         if (!isContestExists) {
             return null;
         }
-
         contestEntity = contestService.getAllContestQuestions(contestId);
         ContestDTO contestDTO = new ContestDTO();
         BeanUtils.copyProperties(contestEntity, contestDTO);
         List<ContestQuestionDTO> contestQuestionDTOList = new ArrayList<ContestQuestionDTO>();
         UserPointsDTO userPointsDTO = new UserPointsDTO();
-        //this function will call API of Question microservice
 
+        //this function will call API of Question microservice
         int count = 0, points = 0, easyCorrectlyAnswered = 0, mediumCorrectlyAnswered = 0, hardCorrectlyAnswered = 0, flag = 0;
         for (ContestQuestionEntity contestQuestionEntity : contestEntity.getContestQuestionEntityList()) {
             ContestQuestionDTO contestQuestionDTO = new ContestQuestionDTO();
@@ -252,7 +236,6 @@ public class ContestController {
         return true;
     }
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/getContestByAdminId/{adminId}")
     public List<ContestDTO> getContestsByTAdmin(@PathVariable("adminId") String adminId) {
         List<ContestEntity> contestEntityList = contestService.getContestByAdmin(adminId);
@@ -263,7 +246,6 @@ public class ContestController {
             contestDTOList.add(contestDTO);
         }
         return contestDTOList;
-
     }
 
     public QuestionDTO getQuestion(String questionId) {
@@ -280,9 +262,6 @@ public class ContestController {
         if (rs.getStatusCode() == HttpStatus.OK) {
             return rs.getBody();
         }
-
         return null;
-
     }
-
 }

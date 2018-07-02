@@ -1,7 +1,5 @@
 package com.constest.ContestAPI.dto;
 
-import com.constest.ContestAPI.entity.ContestEntity;
-
 import java.util.List;
 
 public class  ContestQuestionDTO {
@@ -15,51 +13,6 @@ public class  ContestQuestionDTO {
     private QuestionDTO questionDTO;
     private UserAnswerDTO userAnswerDTO;
     private List<UserAnswerDTO> allUserAnswerEntityList;
-
-    public List<UserAnswerDTO> getAllUserAnswerEntityList() {
-        return allUserAnswerEntityList;
-    }
-
-    public void setAllUserAnswerEntityList(List<UserAnswerDTO> allUserAnswerEntityList) {
-        this.allUserAnswerEntityList = allUserAnswerEntityList;
-    }
-
-    public UserAnswerDTO getUserAnswerDTO() {
-        return userAnswerDTO;
-    }
-
-    public void setUserAnswerDTO(UserAnswerDTO userAnswerDTO) {
-        this.userAnswerDTO = userAnswerDTO;
-    }
-
-    public QuestionDTO getQuestionDTO() {
-        return questionDTO;
-    }
-
-    public void setQuestionDTO(QuestionDTO questionDTO) {
-        this.questionDTO = questionDTO;
-    }
-
-    public Boolean getVisible() {
-        return visible;
-    }
-
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
-    }
-
-    @Override
-    public String toString() {
-        return "ContestQuestionDTO{" +
-                "contestEntity=" + contestDTO +
-                ", questionId='" + questionId + '\'' +
-                ", points=" + points +
-                ", visibleTime=" + visibleTime +
-                ", sequence=" + sequence +
-                ", visible=" + visible +
-                ", contestQuestionId='" + contestQuestionId + '\'' +
-                '}';
-    }
 
     public ContestDTO getContestDTO() {
         return contestDTO;
@@ -101,6 +54,13 @@ public class  ContestQuestionDTO {
         this.sequence = sequence;
     }
 
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
 
     public String getContestQuestionId() {
         return contestQuestionId;
@@ -108,5 +68,42 @@ public class  ContestQuestionDTO {
 
     public void setContestQuestionId(String contestQuestionId) {
         this.contestQuestionId = contestQuestionId;
+    }
+
+    public QuestionDTO getQuestionDTO() {
+        return questionDTO;
+    }
+
+    public void setQuestionDTO(QuestionDTO questionDTO) {
+        this.questionDTO = questionDTO;
+    }
+
+    public UserAnswerDTO getUserAnswerDTO() {
+        return userAnswerDTO;
+    }
+
+    public void setUserAnswerDTO(UserAnswerDTO userAnswerDTO) {
+        this.userAnswerDTO = userAnswerDTO;
+    }
+
+    public List<UserAnswerDTO> getAllUserAnswerEntityList() {
+        return allUserAnswerEntityList;
+    }
+
+    public void setAllUserAnswerEntityList(List<UserAnswerDTO> allUserAnswerEntityList) {
+        this.allUserAnswerEntityList = allUserAnswerEntityList;
+    }
+
+    @Override
+    public String toString() {
+        return "ContestQuestionDTO{" +
+                "contestEntity=" + contestDTO +
+                ", questionId='" + questionId + '\'' +
+                ", points=" + points +
+                ", visibleTime=" + visibleTime +
+                ", sequence=" + sequence +
+                ", visible=" + visible +
+                ", contestQuestionId='" + contestQuestionId + '\'' +
+                '}';
     }
 }

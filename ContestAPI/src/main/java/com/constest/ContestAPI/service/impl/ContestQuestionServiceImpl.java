@@ -15,7 +15,6 @@ public class ContestQuestionServiceImpl implements ContestQuestionService {
     @Autowired
     private ContestQuestionRepository contestQuestionRepository;
 
-
     @Override
     public Boolean saveQuestion(ContestQuestionEntity contestQuestionEntity) {
         return contestQuestionRepository.save(contestQuestionEntity)!=null;

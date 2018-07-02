@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface ContestQuestionRepository extends CrudRepository<ContestQuestionEntity,String> {
 
     Boolean existsByContestEntity(ContestEntity contestEntity);
-
 }

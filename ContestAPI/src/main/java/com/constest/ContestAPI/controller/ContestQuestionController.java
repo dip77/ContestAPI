@@ -15,7 +15,6 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.client.RestTemplate;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
 
@@ -52,7 +51,6 @@ public class ContestQuestionController {
             System.out.println(contestQuestionDTO.getContestDTO().getContestId());
             contestEntity.setContestId(contestQuestionDTO.getContestDTO().getContestId());
             contestQuestionEntity.setContestEntity(contestEntity);
-
             contestQuestionEntityList.add(contestQuestionEntity);
         }
         return contestQuestionService.saveQuestions(contestQuestionEntityList);
@@ -77,25 +75,29 @@ public class ContestQuestionController {
         if (questionType.equals("video") || questionType.equals("audio")) {
             timed = 47000;
         }
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                userAnswerService.getFastestAnswer(contestQuestionId);
-                fcmService.postStatusToUsers(contestQuestionEntity.getContestEntity().getContestId(),"next");
-                fcmService.postStatusToAdmin(contestQuestionEntity.getContestEntity().getContestId(),"next");
+                List<String> userNames = userAnswerService.getFastestAnswer(contestQuestionId);
+                System.out.println(userNames.toString());
+                System.out.println("Timer completed");
+                String m = fcmService.postStatusToUsers(contestQuestionEntity.getContestEntity().getContestId(),"next",userNames);
+                System.out.println("message sent");
+                System.out.println(m);
+                m = fcmService.postStatusToAdmin(contestQuestionEntity.getContestEntity().getContestId(),"next",userNames);
+                System.out.println("message sent to admin");
+                System.out.println(m);
             }
         }, timed);
-
-        System.out.println("answer");
         return true;
     }
 
     @RequestMapping(method = RequestMethod.GET,value = "/endContest/{contestId}")
-    public Boolean pushQuestionEnd(@PathVariable("contestId") String contestId)
-    {
+    public Boolean pushQuestionEnd(@PathVariable("contestId") String contestId) {
         FCMService fcmService = new FCMService();
-        fcmService.postStatusToUsers(contestId,"end");
-        fcmService.postStatusToAdmin(contestId,"end");
+        fcmService.postStatusToUsers(contestId,"end",new ArrayList<>());
+        fcmService.postStatusToAdmin(contestId,"end",new ArrayList<>());
         return Boolean.TRUE;
     }
 
@@ -127,9 +129,6 @@ public class ContestQuestionController {
             System.out.println(restTemplate.getUriTemplateHandler().toString());
             return rs.getBody();
         }
-
         return null;
-
     }
-
 }

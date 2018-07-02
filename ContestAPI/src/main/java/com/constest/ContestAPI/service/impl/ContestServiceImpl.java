@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 public class ContestServiceImpl implements ContestService {
 
-
     @Autowired
     private ContestRepository contestRepository;
 
@@ -19,7 +18,6 @@ public class ContestServiceImpl implements ContestService {
     public List<ContestEntity> getAllByCategory(String categoryid) {
         return contestRepository.findByCategoryId(categoryid);
     }
-
 
     @Override
     public List<ContestEntity> getAllByContestType(String contestType) {
@@ -43,7 +41,6 @@ public class ContestServiceImpl implements ContestService {
 
     @Override
     public ContestEntity getAllContestQuestions(String contestId) {
-
         return contestRepository.findById(contestId).get();
     }
 }

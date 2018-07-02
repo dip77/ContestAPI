@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import com.constest.ContestAPI.dto.ContestQuestionDTO;
 import org.springframework.http.MediaType;
@@ -18,31 +19,9 @@ public class FCMService {
     final private String googleCloudApiKey = "key=AAAAZ_dnfLI:APA91bE-nImowIYkuqgL34ByAJxIw_yBOIOooxqemWHK4pZuEwT8Tmoomv6KyNu3SJYso9SQnJ1RfHhLpv_fgTbRc9Vnw-65jYCYPmv2BkbXwiluuoxrDh9TUTo3ZWSnoAzruVEPbAmGE94UJKigt4v5FauH9X4ojw";
     final private String googleCloudApiUrl = "https://fcm.googleapis.com/fcm/send";
     private String payload = "";
-    //ObjectMapper objectMapper = new ObjectMapper();
-
-/*
-    public static void main(String[] args) {
-        //FCMServices fcmServices = new FCMServices();
-
-
-
-
-
-        System.out.println("Hello World!!");
-    }
-    */
 
     public String postQuestionToUsers(ContestQuestionDTO contestQuestionDTO) {
-        String data= "";
-        /*
-        try {
-            data = objectMapper.writeValueAsString(contestQuestionDTO);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        */
 
-        //payload = "{ \"data\":" + data + ",\"to\" : \"/topics/" + contestId + "_user\"}";
         payload = "{\n"
                 + "    \"data\" : {\n"
                 + "      \"detail\" : \"" + "User msg received" + "\",\n"
@@ -58,24 +37,12 @@ public class FCMService {
                 + "      \"optionThree\" : \"" + contestQuestionDTO.getQuestionDTO().getOptionThree() + "\",\n"
                 + "      \"optionFour\" : \"" + contestQuestionDTO.getQuestionDTO().getOptionFour() + "\",\n"
                 + "      \"answerType\" : \"" + contestQuestionDTO.getQuestionDTO().getAnswerType() + "\",\n"
-                + "      \"status\" : \"" + "next" + "\",\n"
-                //+ "      \"points\" : \"" + contestQuestionDTO.getPoints().toString() + "\",\n"
-                //+ "      \"\" : \"" +  + "\",\n"
+                + "      \"status\" : \"" + "question" + "\",\n"
                 + "      \"points\" : \"" + contestQuestionDTO.getPoints().toString() + "\"\n"
                 + "    },\n"
                 + "    \"to\" : \"/topics/user\"\n"
                 + "  }\n";
 
-        /*payload = "{\n"
-                + "    \"to\" : "
-                + "\"c7tzq59OXnk"
-                +
-                ":APA91bH9iDeWgMQnBnSGPGvrYFnTA6DywYoE4yx_lloorTEBbnWSJ5obbrXyvm2HXp2e63pMrYwlOR0CIdn06J80BN7XwTGw_gC5qEeUyoZ3jO-zWLeqbzzT73pOHvpJWtbVVyOBj4sy\",\n"
-                + "    \"notification\" : {\n" + "      \"body\" : \"great match! 3-3\",\n"
-                + "      \"title\" : \"Portugal vs. Spain\",\n" + "      \"icon\" : \"myicon\"\n"
-                + "    }\n" + "  }\n";
-*/
-
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(googleCloudApiUrl).openConnection();
             connection.setRequestProperty("Authorization", googleCloudApiKey);
@@ -94,12 +61,6 @@ public class FCMService {
                 response.append(inputLine);
             }
             in.close();
-
-
-
-            //print result
-            //System.out.println(response.toString());
-            //R responseObject = objectMapper.readValue(response.toString(),rClass.getClass());
 
             return response.toString();
 
@@ -108,20 +69,39 @@ public class FCMService {
         }
     }
 
-    public String postStatusToAdmin(String contestId,String status) {
+    public String postStatusToAdmin(String contestId,String status,List<String> userNames) {
 
+        String wonData = "nobody has won :(";
 
-        payload = "{\n"
-                + "    \"data\" : {\n"
-                + "      \"detail\" : \"" + "quizMaster msg received" + "\",\n"
-                + "      \"contestId\" : \"" + contestId + "\",\n"
-                + "      \"status\" : \"" + status + "\"\n"
-                //+ "      \"points\" : \"" + contestQuestionDTO.getPoints().toString() + "\",\n"
-                //+ "      \"\" : \"" +  + "\",\n"
-                + "    },\n"
-                + "    \"to\" : \"/topics/quizMaster\"\n"
-                + "  }\n";
+        if(userNames.size()==1){
+            wonData = userNames.get(0) + " has won !!";
+        } else if(userNames.size()>1){
+            wonData = userNames.toString() + " have won!";
+        }
 
+        if(status.equals("next")) {
+            payload = "{\n"
+                    + "    \"data\" : {\n"
+                    + "      \"detail\" : \"" + wonData + "\",\n"
+                    + "      \"contestId\" : \"" + contestId + "\",\n"
+                    + "      \"status\" : \"" + status + "\"\n"
+                    //+ "      \"points\" : \"" + contestQuestionDTO.getPoints().toString() + "\",\n"
+                    //+ "      \"\" : \"" +  + "\",\n"
+                    + "    },\n"
+                    + "    \"to\" : \"/topics/quizMaster\"\n"
+                    + "  }\n";
+        } else{
+            payload = "{\n"
+                    + "    \"data\" : {\n"
+                    + "      \"detail\" : \"" + "quizMaster msg received" + "\",\n"
+                    + "      \"contestId\" : \"" + contestId + "\",\n"
+                    + "      \"status\" : \"" + status + "\"\n"
+                    //+ "      \"points\" : \"" + contestQuestionDTO.getPoints().toString() + "\",\n"
+                    //+ "      \"\" : \"" +  + "\",\n"
+                    + "    },\n"
+                    + "    \"to\" : \"/topics/quizMaster\"\n"
+                    + "  }\n";
+        }
 
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(googleCloudApiUrl).openConnection();
@@ -142,33 +122,46 @@ public class FCMService {
             }
             in.close();
 
-
-
-            //print result
-            //System.out.println(response.toString());
-            //R responseObject = objectMapper.readValue(response.toString(),rClass.getClass());
-
             return response.toString();
-
         } catch (Exception e) {
             return "error sending push notification : " + e.getMessage();
         }
     }
 
-    public String postStatusToUsers(String contestId, String status) {
+    public String postStatusToUsers(String contestId, String status, List<String> userNames) {
 
+        String wonData = "nobody has won :(";
+        if(userNames.size()==1){
+            wonData = userNames.get(0) + " has won !!";
+        }
+        else if(userNames.size()>1){
+            wonData = userNames.toString() + " have won!";
+        }
 
-        payload = "{\n"
-                + "    \"data\" : {\n"
-                + "      \"detail\" : \"" + "user msg received" + "\",\n"
-                + "      \"contestId\" : \"" + contestId + "\",\n"
-                + "      \"status\" : \"" + status + "\"\n"
-                //+ "      \"points\" : \"" + contestQuestionDTO.getPoints().toString() + "\",\n"
-                //+ "      \"\" : \"" +  + "\",\n"
-                + "    },\n"
-                + "    \"to\" : \"/topics/user\"\n"
-                + "  }\n";
-
+        if(status.equals("next")) {
+            payload = "{\n"
+                    + "    \"data\" : {\n"
+                    + "      \"detail\" : \"" + wonData + "\",\n"
+                    + "      \"contestId\" : \"" + contestId + "\",\n"
+                    + "      \"status\" : \"" + status + "\"\n"
+                    //+ "      \"points\" : \"" + contestQuestionDTO.getPoints().toString() + "\",\n"
+                    //+ "      \"\" : \"" +  + "\",\n"
+                    + "    },\n"
+                    + "    \"to\" : \"/topics/user\"\n"
+                    + "  }\n";
+        }
+        else {
+            payload = "{\n"
+                    + "    \"data\" : {\n"
+                    + "      \"detail\" : \"" + "user msg received" + "\",\n"
+                    + "      \"contestId\" : \"" + contestId + "\",\n"
+                    + "      \"status\" : \"" + status + "\"\n"
+                    //+ "      \"points\" : \"" + contestQuestionDTO.getPoints().toString() + "\",\n"
+                    //+ "      \"\" : \"" +  + "\",\n"
+                    + "    },\n"
+                    + "    \"to\" : \"/topics/user\"\n"
+                    + "  }\n";
+        }
 
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(googleCloudApiUrl).openConnection();
@@ -188,20 +181,9 @@ public class FCMService {
                 response.append(inputLine);
             }
             in.close();
-
-
-
-            //print result
-            //System.out.println(response.toString());
-            //R responseObject = objectMapper.readValue(response.toString(),rClass.getClass());
-
             return response.toString();
-
         } catch (Exception e) {
             return "error sending push notification : " + e.getMessage();
         }
-
-
-
     }
 }

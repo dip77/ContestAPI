@@ -1,6 +1,5 @@
 package com.constest.ContestAPI.service.impl;
 
-import com.constest.ContestAPI.dto.QuestionDTO;
 import com.constest.ContestAPI.dto.UserAnswerDTO;
 import com.constest.ContestAPI.entity.ContestEntity;
 import com.constest.ContestAPI.entity.ContestQuestionEntity;
@@ -14,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +21,14 @@ import java.util.Optional;
 @Service
 
 public class UserAnswerServiceImpl implements UserAnswerService {
+
     Integer points;
+
     @Autowired
     UserAnswerRepository userAnswerRepository;
+
+    @Autowired
+    UserPointsServiceImpl userPointsServiceImpl;
 
     @Override
     public Boolean save(UserAnswerDTO userAnswerDTO) {
@@ -41,14 +46,12 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         userAnswerEntity.getContestQuestionEntity().setContestEntity(contestEntity);
         String time = String.valueOf((System.currentTimeMillis())).substring(3);
         userAnswerEntity.setTimeOfAnswer(time);
-        String points = null;
+        String points = "0";
+
         if (userAnswerEntity.getAnswer() != null) {
             System.out.println("Inside getAnswer");
             points = checkAnswer(userAnswerDTO.getContestQuestionDTO().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
             if (points != null) {
-                //     userAnswerEntity.setPoints(Integer.parseInt(points));
-
-
                 if (userAnswerEntity.getContestQuestionEntity().getContestEntity().getContestType().equalsIgnoreCase("static")) {
                     userAnswerEntity.setPoints(Integer.parseInt(points));
                 } else {
@@ -57,12 +60,13 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                     }
                 }
             }
-        }
-        System.out.println(userAnswerEntity);
-        userAnswerRepository.save(userAnswerEntity);
-        return true;
-    }
 
+
+            userAnswerRepository.save(userAnswerEntity);
+        }
+        return true;
+
+    }
 
     @Override
     public Optional<UserAnswerEntity> getSingleUser(String userAnswerId) {
@@ -89,9 +93,9 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         return userAnswerEntities;
     }
 
-
     @Override
-    public boolean getFastestAnswer(String contestQuestionId) {
+    public List<String> getFastestAnswer(String contestQuestionId) {
+        List<String> userName = new ArrayList<>();
         List<String> userAnswerIds = userAnswerRepository.getFastestTime(contestQuestionId);
         if (userAnswerIds.size() != 0) {
             int index = 0;
@@ -103,11 +107,11 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                     String points = checkAnswer(userAnswerEntity.getContestQuestionEntity().getQuestionId(), userAnswerEntity.getAnswer().toUpperCase());
                     userAnswerEntity.setPoints(Integer.parseInt(points));
                     userAnswerRepository.save(userAnswerEntity);
-                    return true;
+                    userName.add(userPointsServiceImpl.getUserName(userAnswerEntity.getUserId()));
                 }
             }
         }
-        return false;
+        return userName;
     }
 
     @Override
@@ -124,9 +128,6 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         if (rs.getStatusCode() == HttpStatus.OK) {
             return (rs.getBody());
         }
-
         return null;
-
     }
-
 }

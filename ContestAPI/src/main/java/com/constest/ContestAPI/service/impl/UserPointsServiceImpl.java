@@ -32,7 +32,9 @@ public class UserPointsServiceImpl implements UserPointsService {
         ContestEntity contestEntity = new ContestEntity();
         BeanUtils.copyProperties(userPointsDTO.getContestDTO(), contestEntity);
         userPointsEntity.setContestEntity(contestEntity);
+        System.out.println("save()"+userPointsEntity);
         if(!existsByUserIdAndContestEntity(userPointsEntity.getUserId(),userPointsEntity.getContestEntity())) {
+            System.out.println(userPointsEntity);
             UserPointsEntity userPointsEntity1 = userPointsRepositoryInterface.save(userPointsEntity);
         }
         return true;
@@ -55,7 +57,6 @@ public class UserPointsServiceImpl implements UserPointsService {
         return userPointsDTOList;
     }
 
-
     @Override
     public int getByContestId(String contestId) {
         ContestEntity contestEntity = new ContestEntity();
@@ -66,10 +67,8 @@ public class UserPointsServiceImpl implements UserPointsService {
 
     @Override
     public boolean existsByUserIdAndContestEntity(String userId, ContestEntity contestEntity) {
-        userPointsRepositoryInterface.existsByUserIdAndContestEntity(userId,contestEntity);
-        return true;
+        return userPointsRepositoryInterface.existsByUserIdAndContestEntity(userId,contestEntity);
     }
-
 
     @Override
     public List<LeaderBoard> getOverAllLeaderBoard() {
@@ -81,17 +80,7 @@ public class UserPointsServiceImpl implements UserPointsService {
             LeaderBoard leaderBoard = new LeaderBoard();
             String userId = (String) objects2[0];
             leaderBoard.setUserId(getUserName(userId));
-
-
-//      leaderBoard.setFinalPoints((BigInteger)objects2[1]);
-            if (objects2[1] instanceof String)
-                System.out.println("string");
-            else if (objects2[1] instanceof BigInteger)
-                System.out.println("Big");
-            else
-                System.out.println("none");
             leaderBoard.setFinalPoints((BigInteger) objects2[1]);
-            //  leaderBoard.setPointInt((Integer)objects2[1]);
             leaderBoard.setFinalPointsString(((BigInteger) objects2[1]).toString());
             System.out.println(leaderBoard.getFinalPoints());
             leaderBoard.setRank((BigInteger) objects2[2]);
@@ -135,12 +124,8 @@ public class UserPointsServiceImpl implements UserPointsService {
                 System.out.println(restTemplate.getUriTemplateHandler().toString());
                 return rs.getBody();
             }
-
         } catch (Exception e) {
-
         }
         return userId;
     }
 }
-
-

@@ -1,8 +1,6 @@
 package com.constest.ContestAPI.service;
 
 import com.constest.ContestAPI.entity.ContestEntity;
-import com.constest.ContestAPI.entity.ContestQuestionEntity;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.List;
 
@@ -13,9 +11,4 @@ public interface ContestService {
      List<ContestEntity> getAllByContestType(String contestType);
      List<ContestEntity> getContestByAdmin(String adminId);
     ContestEntity getAllContestQuestions(String contestId);
-
-
-
-
-
 }
